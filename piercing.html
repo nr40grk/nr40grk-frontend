@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piercing Booking — NR40 Athens</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    .cal-embed-wrap { border:1px solid var(--border);background:var(--dark);margin-top:8px;overflow:hidden; }
+    .cal-embed-wrap iframe { width:100%;height:700px;border:none;display:block; }
+    .deposit-notice { background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.3);padding:20px 24px;display:flex;align-items:center;gap:16px;margin-top:8px; }
+    .deposit-notice-icon { font-size:1.4rem;color:var(--gold);flex-shrink:0; }
+    .deposit-notice p { font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:0.08em;color:var(--gray-light);line-height:1.7;text-transform:uppercase; }
+    .deposit-notice strong { color:var(--gold); }
+    .stripe-payment-section { display:none;background:var(--card);border:1px solid var(--gold);padding:36px;margin-top:24px; }
+    .stripe-payment-section.visible { display:block; }
+    .stripe-section-title { font-family:'Unbounded',sans-serif;font-size:0.88rem;letter-spacing:0.08em;color:var(--gold);margin-bottom:8px;text-transform:uppercase; }
+    .stripe-section-sub { font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;color:var(--gray);text-transform:uppercase;margin-bottom:28px; }
+    #payment-element { margin-bottom:24px; }
+    #stripe-pay-btn { width:100%;font-family:'Space Mono',monospace;font-size:0.78rem;letter-spacing:0.18em;text-transform:uppercase;background:var(--gold);color:var(--black);border:none;padding:20px;cursor:pointer;font-weight:700;transition:background 0.2s; }
+    #stripe-pay-btn:hover:not(:disabled) { background:var(--gold-light); }
+    #stripe-pay-btn:disabled { opacity:0.6;cursor:not-allowed; }
+    #stripe-pay-btn .btn-text { display:block; }
+    #stripe-pay-btn .btn-spinner { display:none;width:16px;height:16px;border:2px solid rgba(0,0,0,0.3);border-top-color:var(--black);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto; }
+    #stripe-pay-btn.loading .btn-text { display:none; }
+    #stripe-pay-btn.loading .btn-spinner { display:block; }
+    #stripe-error { color:var(--red);font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.08em;margin-top:12px;min-height:18px; }
+    .booking-success { display:none;background:rgba(39,174,96,0.08);border:1px solid var(--green);padding:40px;text-align:center;margin-top:24px; }
+    .booking-success.visible { display:block; }
+    .booking-success h3 { font-family:'Unbounded',sans-serif;font-size:0.9rem;letter-spacing:0.08em;color:var(--green);margin-bottom:12px; }
+    .booking-success p { color:var(--gray-light);font-style:italic;font-size:1.05rem; }
+    .form-input.invalid { border-color:var(--red)!important; }
+    .form-input.valid { border-color:rgba(39,174,96,0.5)!important; }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="index.html" class="nav-logo">
+    <img src="nr40-logo.png" alt="NR40 Urban Arts" class="nav-logo-img">
+  </a>
+  <ul class="nav-links">
+    <li><a href="nr40.html" data-gr="NR40" data-en="NR40">NR40</a></li>
+    <li><a href="team.html" data-gr="Tattoo" data-en="Tattoo">Tattoo</a></li>
+    <li><a href="piercing.html" data-gr="Piercing" data-en="Piercing">Piercing</a></li>
+    <li><a href="nr40.html#events" data-gr="Events" data-en="Events">Events</a></li>
+    <li><a href="contact.html" data-gr="Επικοινωνία" data-en="Contact">Επικοινωνία</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="lang-btn" id="langBtn">EN</button>
+  </div>
+  <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="nr40.html">NR40</a>
+  <a href="team.html" data-gr="Tattoo" data-en="Tattoo">Tattoo</a>
+  <a href="piercing.html" data-gr="Piercing" data-en="Piercing">Piercing</a>
+  <a href="nr40.html#events" data-gr="Events" data-en="Events">Events</a>
+  <a href="contact.html" data-gr="Επικοινωνία" data-en="Contact">Επικοινωνία</a>
+  <button class="mobile-lang" id="mobileLangBtn">EN</button>
+</div>
+
+<header class="page-header" data-title="PIERCING">
+  <div class="container">
+    <span class="label" data-gr="Κράτηση Piercing" data-en="Book Piercing">Κράτηση Piercing</span>
+    <h1 class="heading" style="font-size:clamp(2.2rem,5vw,4rem);margin-bottom:20px;" data-gr="Piercing <em>Ραντεβού</em>" data-en="Piercing <em>Appointment</em>">Piercing <em>Ραντεβού</em></h1>
+    <div class="gold-rule"></div>
+    <p style="color:var(--gray-light);font-style:italic;max-width:480px;" data-gr="Επέλεξε ημερομηνία και ώρα online. Απαιτείται προκαταβολή €12 με κάρτα." data-en="Select your date and time online. A €12 card deposit is required.">Επέλεξε ημερομηνία και ώρα online. Απαιτείται προκαταβολή €12 με κάρτα.</p>
+  </div>
+</header>
+
+<div class="container">
+  <div class="split-layout">
+    <div class="form-wrap">
+      <form id="piercingForm" novalidate>
+
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="fullName" data-gr="Ονοματεπώνυμο *" data-en="Full Name *">Ονοματεπώνυμο *</label>
+            <input class="form-input" type="text" id="fullName" name="fullName" required
+              data-ph-gr="π.χ. Νίκος Παπαδόπουλος" data-ph-en="e.g. Nikos Papadopoulos"
+              placeholder="π.χ. Νίκος Παπαδόπουλος">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="phone" data-gr="Τηλέφωνο *" data-en="Phone *">Τηλέφωνο *</label>
+            <input class="form-input" type="tel" id="phone" name="phone" required
+              inputmode="tel" autocomplete="tel"
+              data-ph-gr="π.χ. 6912345678" data-ph-en="e.g. +30 6912345678"
+              placeholder="π.χ. 6912345678">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email" data-gr="Email *" data-en="Email *">Email *</label>
+          <input class="form-input" type="email" id="email" name="email" required
+            placeholder="your@email.com" inputmode="email" autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="piercingType" data-gr="Τύπος Piercing *" data-en="Piercing Type *">Τύπος Piercing *</label>
+          <select class="form-select" id="piercingType" name="piercingType" required>
+            <option value="" disabled selected data-gr="Επέλεξε τύπο" data-en="Select type">Επέλεξε τύπο</option>
+            <option value="Tooth Gem">Tooth Gem</option>
+            <option value="Ear - Lobe" data-gr="Αυτί — Λοβός" data-en="Ear — Lobe">Αυτί — Λοβός</option>
+            <option value="Ear - Helix" data-gr="Αυτί — Helix" data-en="Ear — Helix">Αυτί — Helix</option>
+            <option value="Ear - Tragus" data-gr="Αυτί — Tragus" data-en="Ear — Tragus">Αυτί — Tragus</option>
+            <option value="Ear - Daith" data-gr="Αυτί — Daith" data-en="Ear — Daith">Αυτί — Daith</option>
+            <option value="Nose - Nostril" data-gr="Μύτη — Nostril" data-en="Nose — Nostril">Μύτη — Nostril</option>
+            <option value="Nose - Septum" data-gr="Μύτη — Septum" data-en="Nose — Septum">Μύτη — Septum</option>
+            <option value="Eyebrow" data-gr="Φρύδι" data-en="Eyebrow">Φρύδι</option>
+            <option value="Lip" data-gr="Χείλος" data-en="Lip">Χείλος</option>
+            <option value="Belly Button" data-gr="Αφαλός" data-en="Belly Button">Αφαλός</option>
+            <option value="Other" data-gr="Άλλο" data-en="Other">Άλλο</option>
+          </select>
+        </div>
+
+        <!-- Calendly -->
+        <div class="form-group">
+          <label class="form-label" data-gr="Επέλεξε Ημερομηνία & Ώρα *" data-en="Select Date & Time *">Επέλεξε Ημερομηνία & Ώρα *</label>
+          <div class="cal-embed-wrap">
+            <iframe
+              src="https://calendly.com/nr40athens-info/30min"
+              id="calendlyIframe"
+              title="Book piercing appointment"
+              loading="lazy">
+            </iframe>
+          </div>
+          <p class="form-hint" data-gr="Επέλεξε διαθέσιμη ημερομηνία και ώρα από το ημερολόγιο του Storm." data-en="Select an available date and time from Storm's calendar.">Επέλεξε διαθέσιμη ημερομηνία και ώρα από το ημερολόγιο του Storm.</p>
+        </div>
+
+        <!-- Deposit notice -->
+        <div class="form-group">
+          <label class="form-label" data-gr="Προκαταβολή" data-en="Deposit">Προκαταβολή</label>
+          <div class="deposit-notice">
+            <div class="deposit-notice-icon">◈</div>
+            <p data-gr="Απαιτείται προκαταβολή <strong>€12</strong> με κάρτα. Θα εισαχθεί μετά την υποβολή της φόρμας." data-en="A <strong>€12</strong> card deposit is required. You will be prompted to pay after submitting the form.">Απαιτείται προκαταβολή <strong>€12</strong> με κάρτα. Θα εισαχθεί μετά την υποβολή της φόρμας.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="message" data-gr="Σημειώσεις" data-en="Notes">Σημειώσεις</label>
+          <textarea class="form-textarea" id="message" name="message"
+            data-ph-gr="Οποιεσδήποτε επιπλέον πληροφορίες..."
+            data-ph-en="Any additional information..."
+            placeholder="Οποιεσδήποτε επιπλέον πληροφορίες..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span class="btn-text" data-gr="Υποβολή & Πληρωμή" data-en="Submit & Pay">Υποβολή & Πληρωμή</span>
+          <span class="btn-spinner"></span>
+        </button>
+        <div class="alert" id="formAlert"></div>
+      </form>
+
+      <div class="stripe-payment-section" id="stripePaymentSection">
+        <div class="stripe-section-title" data-gr="Πληρωμή Προκαταβολής" data-en="Pay Deposit">Πληρωμή Προκαταβολής</div>
+        <div class="stripe-section-sub" data-gr="Ασφαλής πληρωμή €12 με κάρτα — powered by Stripe" data-en="Secure €12 card payment — powered by Stripe">Ασφαλής πληρωμή €12 με κάρτα — powered by Stripe</div>
+        <div id="payment-element"></div>
+        <div id="stripe-error"></div>
+        <button id="stripe-pay-btn" type="button">
+          <span class="btn-text" data-gr="Πλήρωσε €12 →" data-en="Pay €12 →">Πλήρωσε €12 →</span>
+          <span class="btn-spinner"></span>
+        </button>
+      </div>
+
+      <div class="booking-success" id="bookingSuccess">
+        <h3 data-gr="✓ Κράτηση & Πληρωμή Επιβεβαιώθηκαν!" data-en="✓ Booking & Payment Confirmed!">✓ Κράτηση & Πληρωμή Επιβεβαιώθηκαν!</h3>
+        <p data-gr="Η κράτησή σου καταχωρήθηκε και η προκαταβολή πληρώθηκε. Θα επικοινωνήσουμε σύντομα." data-en="Your booking is confirmed and the deposit has been paid. We will be in touch shortly.">Η κράτησή σου καταχωρήθηκε και η προκαταβολή πληρώθηκε. Θα επικοινωνήσουμε σύντομα.</p>
+      </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="info-card">
+        <div class="info-card-title" data-gr="Ωράριο Λειτουργίας" data-en="Opening Hours">Ωράριο Λειτουργίας</div>
+        <div class="info-row"><span class="info-icon">◷</span><span data-gr="Δευτέρα – Σάββατο: 11:00–21:00" data-en="Monday – Saturday: 11:00–21:00">Δευτέρα – Σάββατο: 11:00–21:00</span></div>
+        <div class="info-row"><span class="info-icon">◷</span><span data-gr="Κυριακή: Κλειστά" data-en="Sunday: Closed">Κυριακή: Κλειστά</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title" data-gr="Πληροφορίες Piercing" data-en="Piercing Info">Πληροφορίες Piercing</div>
+        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Καλλιτέχνης Piercing: Storm" data-en="Piercing Artist: Storm">Καλλιτέχνης Piercing: Storm</span></div>
+        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Προκαταβολή €12 για κάθε κράτηση" data-en="€12 deposit for all bookings">Προκαταβολή €12 για κάθε κράτηση</span></div>
+        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Ελάχιστη ηλικία: 18 ετών" data-en="Minimum age: 18 years">Ελάχιστη ηλικία: 18 ετών</span></div>
+        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Φέρε έγκυρη ταυτότητα" data-en="Bring valid ID">Φέρε έγκυρη ταυτότητα</span></div>
+        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Επιλογή ημερομηνίας online" data-en="Date selection online">Επιλογή ημερομηνίας online</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo-row">
+          <a href="index.html" class="footer-logo-link">
+            <img src="nr40-logo.png" alt="NR40 Urban Arts" class="footer-logo-img">
+          </a>
+          <p class="footer-desc" data-gr="Τέχνη που μένει για πάντα." data-en="Art that lasts forever.">Τέχνη που μένει για πάντα.</p>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title" data-gr="Σελίδες" data-en="Pages">Σελίδες</div>
+        <ul class="footer-links">
+          <li><a href="nr40.html">NR40</a></li>
+          <li><a href="team.html" data-gr="Tattoo" data-en="Tattoo">Tattoo</a></li>
+          <li><a href="piercing.html" data-gr="Piercing" data-en="Piercing">Piercing</a></li>
+          <li><a href="contact.html" data-gr="Επικοινωνία" data-en="Contact">Επικοινωνία</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title" data-gr="Επικοινωνία" data-en="Contact">Επικοινωνία</div>
+        <ul class="footer-links">
+          <li><a href="tel:+302103806408">+30 210 380 6408</a></li>
+          <li><a href="mailto:info@nr40athens.com">info@nr40athens.com</a></li>
+          <li><span>Κανιγγός 27, Αθήνα 106 82</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 NR40.</span>
+      <span>Κανιγγός 27, Αθήνα 106 82</span>
+    </div>
+  </div>
+  <div class="dev-credit">Developed by <a href="https://nikolassapa.vercel.app/" target="_blank" rel="noopener">Nikolas Sapalidis</a></div>
+</footer>
+
+<script src="js/main.js"></script>
+<script>
+  const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_PUBLISHABLE_KEY';
+  let stripe = null;
+  let stripeElements = null;
+
+  const phoneInput = document.getElementById('phone');
+  phoneInput.addEventListener('input', function() {
+    let v = this.value.replace(/[^\d+]/g,'');
+    v = v.charAt(0) + v.slice(1).replace(/\+/g,'');
+    this.value = v;
+    const digits = v.replace('+','');
+    this.classList.toggle('invalid', v.length > 0 && digits.length < 7);
+    this.classList.toggle('valid', digits.length >= 7);
+  });
+
+  const emailInput = document.getElementById('email');
+  const isValidEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+  emailInput.addEventListener('blur', function() {
+    if (!this.value) return;
+    this.classList.toggle('invalid', !isValidEmail(this.value));
+    this.classList.toggle('valid', isValidEmail(this.value));
+  });
+  emailInput.addEventListener('input', function() {
+    this.classList.remove('invalid');
+    this.classList.toggle('valid', isValidEmail(this.value));
+  });
+
+  function updateCalendlyUrl() {
+    const name  = document.getElementById('fullName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const base  = 'https://calendly.com/nr40athens-info/30min';
+    const params = new URLSearchParams({
+      background_color:'0f0f0f', text_color:'f0ece4', primary_color:'c9a84c',
+      hide_event_type_details:'1', hide_gdpr_banner:'1',
+      name: name || '', email: email || '',
+    });
+    document.getElementById('calendlyIframe').src = base + '?' + params.toString();
+  }
+  document.getElementById('fullName').addEventListener('input', updateCalendlyUrl);
+  document.getElementById('email').addEventListener('input', updateCalendlyUrl);
+
+  document.getElementById('piercingForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const phoneDigits = phoneInput.value.replace('+','');
+    if (phoneDigits.length < 7) {
+      phoneInput.classList.add('invalid');
+      return showAlert('formAlert','error','✕ Εισάγετε έγκυρο αριθμό τηλεφώνου.','✕ Please enter a valid phone number.');
+    }
+    if (!isValidEmail(emailInput.value.trim())) {
+      emailInput.classList.add('invalid');
+      return showAlert('formAlert','error','✕ Εισάγετε έγκυρη διεύθυνση email.','✕ Please enter a valid email address.');
+    }
+    if (!document.getElementById('piercingType').value) {
+      return showAlert('formAlert','error','✕ Παρακαλώ επέλεξε τύπο piercing.','✕ Please select a piercing type.');
+    }
+    const btn = document.getElementById('submitBtn');
+    btn.classList.add('loading'); btn.disabled = true;
+    try {
+      const data = await apiPost('/api/payment/create-intent', { amount: 1200, currency: 'eur' });
+      if (!data.clientSecret) throw new Error('No client secret');
+      if (!stripe) stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+      stripeElements = stripe.elements({
+        clientSecret: data.clientSecret,
+        appearance: {
+          theme: 'night',
+          variables: { colorPrimary:'#c9a84c', colorBackground:'#141414', colorText:'#f0ece4', colorDanger:'#c0392b', fontFamily:'Space Mono, monospace', borderRadius:'0px' }
+        }
+      });
+      stripeElements.create('payment', { layout: 'tabs' }).mount('#payment-element');
+      document.getElementById('stripePaymentSection').classList.add('visible');
+      document.getElementById('stripePaymentSection').scrollIntoView({ behavior:'smooth', block:'center' });
+      btn.style.display = 'none';
+      applyLang();
+    } catch(err) {
+      showAlert('formAlert','error','✕ Σφάλμα σύνδεσης. Δοκίμασε ξανά.','✕ Connection error. Please try again.');
+      btn.classList.remove('loading'); btn.disabled = false;
+    }
+  });
+
+  document.getElementById('stripe-pay-btn').addEventListener('click', async function() {
+    const errEl = document.getElementById('stripe-error');
+    errEl.textContent = '';
+    this.classList.add('loading'); this.disabled = true;
+    try {
+      const { error, paymentIntent } = await stripe.confirmPayment({
+        elements: stripeElements,
+        confirmParams: { return_url: window.location.href },
+        redirect: 'if_required',
+      });
+      if (error) { errEl.textContent = error.message; this.classList.remove('loading'); this.disabled = false; return; }
+      if (paymentIntent && paymentIntent.status === 'succeeded') {
+        const fd = new FormData();
+        fd.append('fullName', document.getElementById('fullName').value.trim());
+        fd.append('phone', phoneInput.value.trim());
+        fd.append('email', emailInput.value.trim());
+        fd.append('piercingType', document.getElementById('piercingType').value);
+        fd.append('artist', 'Storm');
+        fd.append('service', 'Piercing');
+        fd.append('message', document.getElementById('message').value.trim());
+        fd.append('depositAmount', '12');
+        fd.append('paymentIntentId', paymentIntent.id);
+        await apiPostForm('/api/booking', fd);
+        document.getElementById('stripePaymentSection').classList.remove('visible');
+        document.getElementById('bookingSuccess').classList.add('visible');
+        document.getElementById('bookingSuccess').scrollIntoView({ behavior:'smooth', block:'center' });
+        applyLang();
+      }
+    } catch(err) {
+      errEl.textContent = lang === 'en' ? 'Payment failed. Please try again.' : 'Αποτυχία πληρωμής. Δοκίμασε ξανά.';
+      this.classList.remove('loading'); this.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
