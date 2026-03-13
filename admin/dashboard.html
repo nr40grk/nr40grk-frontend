@@ -96,7 +96,7 @@
     .event-admin-body { padding:16px; }
     .event-admin-date { font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:6px; }
     .event-admin-title { font-family:'Unbounded',sans-serif;font-size:0.8rem;font-weight:700;margin-bottom:6px;line-height:1.3; }
-    .event-admin-desc { font-size:0.85rem;color:var(--gray-light);font-style:italic;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2; -webkit-box-orient: vertical; overflow:hidden; }
+    .event-admin-desc { font-size:0.85rem;color:var(--gray-light);font-style:italic;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2; line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; }
     .event-admin-actions { display:flex;gap:8px; }
     .event-upload-zone { border:1px dashed var(--border);padding:32px 20px;text-align:center;cursor:pointer;background:var(--dark);display:flex;flex-direction:column;align-items:center;gap:10px;transition:border-color 0.2s; }
     .event-upload-zone:hover { border-color:var(--gold); }
@@ -160,6 +160,7 @@
     <button class="sidebar-link" onclick="switchTab('gallery')">🖼️ Gallery</button>
     <button class="sidebar-link" onclick="switchTab('events')">📅 Events</button>
     <button class="sidebar-link" onclick="switchTab('bookings')">📋 Bookings <span class="sidebar-badge" id="pendingBadge" style="display:none;"></span></button>
+    <button class="sidebar-link" onclick="switchTab('piercing')">💎 Piercing</button>
     <button class="sidebar-link" onclick="switchTab('contacts')">✉️ Messages <span class="sidebar-badge" id="unreadBadge" style="display:none;"></span></button>
   </aside>
 
@@ -237,6 +238,27 @@
       <div class="mobile-card-list" id="bookingsMobileList"></div>
     </div>
 
+    <!-- PIERCING BOOKINGS -->
+    <div class="admin-tab" id="tab-piercing">
+      <div class="section-head">
+        <h2>Piercing Bookings</h2>
+        <select id="piercingStatusFilter" class="form-select" style="width:auto;padding:8px 32px 8px 12px;font-size:0.8rem;" onchange="loadPiercingBookings()">
+          <option value="">All</option>
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th></th><th>Name</th><th>Piercing Type</th><th>Phone</th><th>Deposit</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="piercingBody"><tr><td colspan="8" style="color:var(--gray);font-style:italic;text-align:center;padding:40px;">Loading...</td></tr></tbody>
+        </table>
+      </div>
+      <div class="mobile-card-list" id="piercingMobileList"></div>
+    </div>
+
     <!-- CONTACTS -->
     <div class="admin-tab" id="tab-contacts">
       <div class="section-head"><h2>Messages</h2></div>
@@ -260,6 +282,7 @@
     <button class="mobile-nav-btn" id="mbn-gallery" onclick="switchTab('gallery')"><span class="nav-icon">🖼️</span>Gallery</button>
     <button class="mobile-nav-btn" id="mbn-events" onclick="switchTab('events')"><span class="nav-icon">📅</span>Events</button>
     <button class="mobile-nav-btn" id="mbn-bookings" onclick="switchTab('bookings')"><span class="nav-icon">📋</span>Book<span class="mobile-nav-badge" id="mobilePendingBadge"></span></button>
+    <button class="mobile-nav-btn" id="mbn-piercing" onclick="switchTab('piercing')"><span class="nav-icon">💎</span>Piercing</button>
     <button class="mobile-nav-btn" id="mbn-contacts" onclick="switchTab('contacts')"><span class="nav-icon">✉️</span>Msgs<span class="mobile-nav-badge" id="mobileUnreadBadge"></span></button>
   </div>
 </nav>
@@ -376,6 +399,7 @@
     if (tab === 'gallery')  loadGallery();
     if (tab === 'events')   loadEvents();
     if (tab === 'bookings') loadBookings();
+    if (tab === 'piercing') loadPiercingBookings();
     if (tab === 'contacts') loadContacts();
   }
 
@@ -598,6 +622,64 @@
   function row(label, val) { return '<tr><td style="padding:10px 0;border-bottom:1px solid var(--border);color:var(--gold);width:35%;font-family:\'Space Mono\',monospace;font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;vertical-align:top;">' + label + '</td><td style="padding:10px 0;border-bottom:1px solid var(--border);vertical-align:top;word-break:break-word;">' + val + '</td></tr>'; }
   async function updateBookingStatus(id) { const status = document.getElementById('statusSelect').value; try { await apiAuthPatch('/api/booking/' + id, { status }); closeModal('bookingModal'); loadBookings(); } catch(err) { alert(err.message); } }
   async function deleteBookingConfirm(id) { if (!confirm('Delete this booking?')) return; try { await apiAuthDelete('/api/booking/' + id); closeModal('bookingModal'); loadBookings(); } catch(err) { alert(err.message); } }
+
+  // ── PIERCING BOOKINGS ──
+  async function loadPiercingBookings() {
+    const body = document.getElementById('piercingBody');
+    const mobileList = document.getElementById('piercingMobileList');
+    const status = document.getElementById('piercingStatusFilter').value;
+    body.innerHTML = '<tr><td colspan="8" style="color:var(--gray);text-align:center;padding:32px;font-style:italic;">Loading...</td></tr>';
+    mobileList.innerHTML = '';
+    try {
+      const { bookings } = await apiAuthGet('/api/booking?service=Piercing&status=' + status + '&limit=50');
+      if (!bookings.length) {
+        body.innerHTML = '<tr><td colspan="8" style="color:var(--gray);text-align:center;padding:32px;font-style:italic;">No piercing bookings found.</td></tr>';
+        mobileList.innerHTML = '<div style="color:var(--gray);font-style:italic;padding:20px;text-align:center;">No piercing bookings found.</div>';
+        return;
+      }
+      body.innerHTML = '';
+      bookings.forEach(b => {
+        const depositBadge = b.depositPaid
+          ? '<span class="status-badge status-confirmed">Paid</span>'
+          : '<span class="status-badge status-pending">Unpaid</span>';
+        const tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td>' + (!b.read ? '<span class="unread-dot"></span>' : '') + '</td>' +
+          '<td><strong>' + b.fullName + '</strong><br><span style="color:var(--gray);font-size:0.82rem;">' + b.email + '</span></td>' +
+          '<td style="font-size:0.88rem;">' + (b.piercingType || '—') + '</td>' +
+          '<td style="font-size:0.88rem;"><a href="tel:' + b.phone + '" style="color:var(--gold);">' + b.phone + '</a></td>' +
+          '<td>' + depositBadge + '<button class="btn btn-ghost btn-sm" style="margin-left:6px;font-size:0.55rem;padding:4px 8px;" onclick="toggleDeposit(\'' + b._id + '\',' + b.depositPaid + ')">Toggle</button></td>' +
+          '<td style="font-size:0.82rem;color:var(--gray);">' + new Date(b.createdAt).toLocaleDateString('el-GR') + '</td>' +
+          '<td><span class="status-badge status-' + b.status + '">' + b.status + '</span></td>' +
+          '<td><button class="btn btn-ghost btn-sm" onclick=\'viewBooking(' + JSON.stringify(b).replace(/'/g,"&apos;") + ')\'>View</button></td>';
+        body.appendChild(tr);
+
+        // Mobile card
+        const card = document.createElement('div'); card.className = 'mobile-card';
+        card.innerHTML =
+          '<div class="mobile-card-header"><div>' +
+          '<div class="mobile-card-name">' + (!b.read ? '<span class="unread-dot"></span>' : '') + b.fullName + '</div>' +
+          '<div class="mobile-card-meta">' + b.email + '</div></div>' +
+          '<span class="status-badge status-' + b.status + '">' + b.status + '</span></div>' +
+          '<div class="mobile-card-row"><span class="mobile-card-label">Piercing</span><span>' + (b.piercingType||'—') + '</span></div>' +
+          '<div class="mobile-card-row"><span class="mobile-card-label">Phone</span><a href="tel:' + b.phone + '" style="color:var(--gold);font-size:0.85rem;">' + b.phone + '</a></div>' +
+          '<div class="mobile-card-row"><span class="mobile-card-label">Deposit</span><span>' + depositBadge + '</span></div>' +
+          '<div class="mobile-card-actions">' +
+          '<button class="btn btn-ghost btn-sm" style="flex:1;" onclick="toggleDeposit(\'' + b._id + '\',' + b.depositPaid + ')">Toggle Deposit</button>' +
+          '<button class="btn btn-gold btn-sm" style="flex:1;" onclick=\'viewBooking(' + JSON.stringify(b).replace(/'/g,"&apos;") + ')\'>View</button></div>';
+        mobileList.appendChild(card);
+      });
+    } catch(err) {
+      body.innerHTML = '<tr><td colspan="8" style="color:var(--red);text-align:center;padding:32px;">' + err.message + '</td></tr>';
+    }
+  }
+
+  async function toggleDeposit(id, currentState) {
+    try {
+      await apiAuthPatch('/api/booking/' + id, { depositPaid: !currentState });
+      loadPiercingBookings();
+    } catch(err) { alert(err.message); }
+  }
 
   // ── CONTACTS ──
   async function loadContacts() {
