@@ -5,12 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Artist — NR40</title>
   <link rel="stylesheet" href="css/style.css">
-  
-  <script>
-    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-  </script>
+  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
-  
+
   <style>
     .artist-hero {
       display: grid;
@@ -94,8 +91,6 @@
       color: var(--gray);
       font-style: italic;
     }
-
-    /* Zoom */
     .zoom-overlay {
       display: none;
       position: fixed;
@@ -125,12 +120,7 @@
     .zoom-prev { left: 28px; }
     .zoom-next { right: 28px; }
     .zoom-prev:hover, .zoom-next:hover { border-color: var(--gold); color: var(--gold); }
-
-    .error-state {
-      text-align: center;
-      padding: 120px 24px;
-      color: var(--gray);
-    }
+    .error-state { text-align: center; padding: 120px 24px; color: var(--gray); }
 
     @media (max-width: 900px) {
       .artist-hero { grid-template-columns: 1fr; gap: 32px; }
@@ -149,26 +139,27 @@
     <img src="nr40-logo.png" alt="NR40 Urban Arts" class="nav-logo-img">
   </a>
   <ul class="nav-links">
-    <li><a href="index.html" data-gr="Αρχική" data-en="Home">Αρχική</a></li>
-    <li><a href="team.html" data-gr="Καλλιτέχνες" data-en="Artists">Καλλιτέχνες</a></li>
-    <li><a href="booking.html" data-gr="Κράτηση" data-en="Booking">Κράτηση</a></li>
+    <li><a href="nr40.html" data-gr="NR40" data-en="NR40">NR40</a></li>
+    <li><a href="team.html" data-gr="Tattoo" data-en="Tattoo">Tattoo</a></li>
+    <li><a href="piercing.html" data-gr="Piercing" data-en="Piercing">Piercing</a></li>
+    <li><a href="nr40.html#events" data-gr="Events" data-en="Events">Events</a></li>
     <li><a href="contact.html" data-gr="Επικοινωνία" data-en="Contact">Επικοινωνία</a></li>
   </ul>
   <div class="nav-right">
     <button class="lang-btn" id="langBtn">EN</button>
-    <a href="booking.html" class="nav-cta-btn" data-gr="Κλείσε Ραντεβού" data-en="Book Now">Κλείσε Ραντεβού</a>
   </div>
   <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
-  <a href="index.html" data-gr="Αρχική" data-en="Home">Αρχική</a>
-  <a href="team.html" data-gr="Καλλιτέχνες" data-en="Artists">Καλλιτέχνες</a>
-  <a href="booking.html" data-gr="Κράτηση" data-en="Booking">Κράτηση</a>
+  <a href="nr40.html">NR40</a>
+  <a href="team.html" data-gr="Tattoo" data-en="Tattoo">Tattoo</a>
+  <a href="piercing.html" data-gr="Piercing" data-en="Piercing">Piercing</a>
+  <a href="nr40.html#events" data-gr="Events" data-en="Events">Events</a>
   <a href="contact.html" data-gr="Επικοινωνία" data-en="Contact">Επικοινωνία</a>
   <button class="mobile-lang" id="mobileLangBtn">EN</button>
 </div>
 
-<!-- CONTENT -->
+<!-- CONTENT — rendered by JS -->
 <div class="container" id="pageContent">
   <div class="error-state"><div class="spinner"></div></div>
 </div>
@@ -209,9 +200,9 @@
       <div>
         <div class="footer-col-title" data-gr="Σελίδες" data-en="Pages">Σελίδες</div>
         <ul class="footer-links">
-          <li><a href="index.html" data-gr="Αρχική" data-en="Home">Αρχική</a></li>
-          <li><a href="team.html" data-gr="Καλλιτέχνες" data-en="Artists">Καλλιτέχνες</a></li>
-          <li><a href="booking.html" data-gr="Κράτηση" data-en="Booking">Κράτηση</a></li>
+          <li><a href="nr40.html">NR40</a></li>
+          <li><a href="team.html" data-gr="Tattoo" data-en="Tattoo">Tattoo</a></li>
+          <li><a href="piercing.html" data-gr="Piercing" data-en="Piercing">Piercing</a></li>
           <li><a href="contact.html" data-gr="Επικοινωνία" data-en="Contact">Επικοινωνία</a></li>
         </ul>
       </div>
@@ -229,6 +220,7 @@
       <span data-gr="Κανιγγός 27, Αθήνα 106 82" data-en="Kaniggos 27, Athens 106 82">Κανιγγός 27, Αθήνα 106 82</span>
     </div>
   </div>
+  <div class="dev-credit">Developed by <a href="https://nikolassapa.vercel.app/" target="_blank" rel="noopener">Nikolas Sapalidis</a></div>
 </footer>
 
 <script src="js/main.js"></script>
@@ -262,10 +254,10 @@
             <div class="artist-hero-role">${a.role[lang] || a.role.gr}</div>
             <div class="gold-rule"></div>
             <div class="artist-hero-bio">${a.bio[lang] || a.bio.gr}</div>
-            <a href="booking.html" class="submit-btn" style="display:inline-block;text-decoration:none;padding:14px 32px;" data-gr="Κλείσε Ραντεβού" data-en="Book Now">Κλείσε Ραντεβού</a>
+            <a href="team.html#book" class="submit-btn" style="display:inline-block;text-decoration:none;padding:14px 32px;"
+               data-gr="Κλείσε Ραντεβού" data-en="Book Now">Κλείσε Ραντεβού</a>
           </div>
         </div>
-
         <div class="portfolio-section">
           <div class="portfolio-section-title" data-gr="Portfolio" data-en="Portfolio">Portfolio</div>
           <div class="portfolio-grid" id="portfolioGrid"></div>
@@ -297,20 +289,18 @@
     document.getElementById('zoomOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
-
   function closeZoom() {
     document.getElementById('zoomOverlay').classList.remove('open');
     document.body.style.overflow = '';
   }
-
   function zoomNav(dir) {
     zoomIdx = (zoomIdx + dir + photos.length) % photos.length;
     document.getElementById('zoomImg').src = photos[zoomIdx].url;
   }
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeZoom();
-    if (e.key === 'ArrowLeft') zoomNav(-1);
+    if (e.key === 'Escape')     closeZoom();
+    if (e.key === 'ArrowLeft')  zoomNav(-1);
     if (e.key === 'ArrowRight') zoomNav(1);
   });
 
@@ -318,10 +308,7 @@
 
   loadArtist();
 </script>
-
-<script>
-  window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
-</script>
+<script>window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>
