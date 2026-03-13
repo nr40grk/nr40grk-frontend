@@ -33,20 +33,44 @@
     "priceRange": "€€"
   }
   </script>
-  <link rel="stylesheet" href="css/style.css">
+  <!-- NOTE: style.css intentionally NOT loaded — hub page is fully self-contained -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:wght@400;700&family=Unbounded:wght@300;400;700;900&display=swap" rel="stylesheet">
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
 
   <style>
-    /* Desktop only — lock to viewport so hub fills screen without scroll */
-    @media (min-width: 769px) {
-      html, body { height: 100%; overflow: hidden; }
+    /* ── RESET & BASE ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* Desktop: lock to viewport, no scroll */
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: #080808;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Mobile: release the lock */
+    @media (max-width: 768px) {
+      html, body { height: auto; overflow: auto; }
+    }
+
+    /* ── NOISE OVERLAY ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9998;
+      opacity: 0.5;
     }
 
     /* ── LOADER ── */
     #loader {
       position: fixed; inset: 0; z-index: 9000;
-      background: var(--black);
+      background: #080808;
       display: flex; align-items: center; justify-content: center;
       transition: opacity 0.7s ease 0.3s;
     }
@@ -58,107 +82,119 @@
     }
     @keyframes loaderFadeIn { to { opacity: 1; } }
 
-    /* ── HUB LAYOUT ── */
+    /* ── HUB GRID ── */
     .hub {
-      height: 100vh;
+      width: 100%;
+      height: 100%;          /* fills html/body which are height:100% on desktop */
       display: grid;
       grid-template-columns: 1fr 72px;
-      background: var(--black);
-      position: relative;
+      background: #080808;
     }
 
-    /* Left main column */
+    /* ── LEFT COLUMN ── */
     .hub-main {
       height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 36px 56px 36px;
-      position: relative;
-      z-index: 1;
+      padding: 36px 56px;
     }
 
-    /* Groups logo + nav together so they stay centered as one unit */
-    .hub-center {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      padding: 24px 0 16px;
-    }
-
-    /* Top bar */
+    /* ── TOP BAR ── */
     .hub-top {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
+      gap: 16px;
+      flex-shrink: 0;
     }
-    .hub-logo-desktop {
+    .hub-rating {
       display: flex;
-      justify-content: center;
-      width: 100%;
-      margin-bottom: 24px;
+      align-items: center;
+      gap: 8px;
     }
-    .hub-logo-desktop img {
-      height: 160px; width: auto;
+    .hub-rating-stars { color: #c9a84c; font-size: 0.7rem; }
+    .hub-rating-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.1em;
+      color: #888;
+      text-transform: uppercase;
     }
     .hub-lang {
       font-family: 'Space Mono', monospace;
       font-size: 0.65rem;
       letter-spacing: 0.18em;
-      color: var(--gray);
+      color: #888;
       background: none;
-      border: 1px solid var(--border);
+      border: 1px solid #1e1e1e;
       padding: 7px 14px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: border-color 0.2s, color 0.2s;
     }
-    .hub-lang:hover { border-color: var(--gold); color: var(--gold); }
+    .hub-lang:hover { border-color: #c9a84c; color: #c9a84c; }
 
-    /* Center nav links */
+    /* ── CENTER: logo + nav as one unit ── */
+    .hub-center {
+      flex: 1;                /* takes all space between top and bottom */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+    .hub-logo-desktop {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 28px;
+      text-decoration: none;
+    }
+    .hub-logo-desktop img {
+      height: 160px;
+      width: auto;
+      display: block;
+    }
+
+    /* ── NAV LINKS ── */
     .hub-nav {
       width: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      padding: 0;
-      margin: 0 0 0 -8px;
     }
     .hub-link {
       display: flex;
       align-items: baseline;
       gap: 20px;
-      padding: 18px 8px;
-      border-bottom: 1px solid var(--border);
+      padding: 16px 8px;
+      border-bottom: 1px solid #1e1e1e;
       text-decoration: none;
-      color: var(--white);
+      color: #f0ece4;
       position: relative;
       overflow: hidden;
       transition: padding-left 0.4s cubic-bezier(0.25,1,0.5,1);
       opacity: 0;
       transform: translateY(20px);
     }
-    .hub-link:first-child { border-top: 1px solid var(--border); }
+    .hub-link:first-child { border-top: 1px solid #1e1e1e; }
     .hub-link::before {
       content: '';
-      position: absolute;
-      left: 0; top: 0; bottom: 0;
+      position: absolute; left: 0; top: 0; bottom: 0;
       width: 0;
       background: rgba(201,168,76,0.06);
       transition: width 0.4s cubic-bezier(0.25,1,0.5,1);
     }
     .hub-link:hover { padding-left: 24px; }
     .hub-link:hover::before { width: 100%; }
-    .hub-link:hover .hub-link-num { color: var(--gold); }
-    .hub-link:hover .hub-link-name { color: var(--gold); }
+    .hub-link:hover .hub-link-num,
+    .hub-link:hover .hub-link-name { color: #c9a84c; }
     .hub-link:hover .hub-link-arrow { opacity: 1; transform: translateX(0); }
 
     .hub-link-num {
       font-family: 'Space Mono', monospace;
       font-size: 0.6rem;
       letter-spacing: 0.2em;
-      color: var(--gray);
+      color: #888;
       flex-shrink: 0;
       width: 32px;
       transition: color 0.3s;
@@ -167,7 +203,7 @@
     .hub-link-name {
       font-family: 'Unbounded', sans-serif;
       font-weight: 900;
-      font-size: clamp(2.2rem, 5vw, 4.8rem);
+      font-size: clamp(2.2rem, 5vw, 4.6rem);
       line-height: 1;
       letter-spacing: -0.03em;
       text-transform: uppercase;
@@ -175,17 +211,9 @@
       position: relative; z-index: 1;
       flex: 1;
     }
-    .hub-link-sub {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 0.95rem;
-      color: var(--gray);
-      font-style: italic;
-      position: relative; z-index: 1;
-      display: none;
-    }
     .hub-link-arrow {
       font-size: 1.2rem;
-      color: var(--gold);
+      color: #c9a84c;
       opacity: 0;
       transform: translateX(-12px);
       transition: opacity 0.3s, transform 0.3s;
@@ -201,32 +229,33 @@
     .hub-link:nth-child(4).visible { animation-delay: 0.35s; }
     @keyframes hubLinkIn { to { opacity: 1; transform: translateY(0); } }
 
-    /* Bottom bar */
+    /* ── BOTTOM BAR ── */
     .hub-bottom {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-shrink: 0;
     }
     .hub-address {
       font-family: 'Space Mono', monospace;
       font-size: 0.58rem;
       letter-spacing: 0.14em;
-      color: var(--gray);
+      color: #888;
       text-transform: uppercase;
     }
     .hub-hours {
       font-family: 'Space Mono', monospace;
       font-size: 0.58rem;
       letter-spacing: 0.12em;
-      color: var(--gray);
+      color: #888;
       text-transform: uppercase;
       text-align: right;
     }
-    .hub-hours span { color: var(--gold); }
+    .hub-hours span { color: #c9a84c; }
 
-    /* Right sidebar strip */
+    /* ── RIGHT SIDEBAR ── */
     .hub-sidebar {
-      border-left: 1px solid var(--border);
+      border-left: 1px solid #1e1e1e;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -236,14 +265,14 @@
     .hub-sidebar-dot {
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: var(--gold);
+      background: #c9a84c;
       opacity: 0.6;
     }
     .hub-sidebar-text {
       font-family: 'Space Mono', monospace;
       font-size: 0.52rem;
       letter-spacing: 0.22em;
-      color: var(--gray);
+      color: #888;
       text-transform: uppercase;
       writing-mode: vertical-rl;
       transform: rotate(180deg);
@@ -255,56 +284,34 @@
       align-items: center;
       gap: 12px;
     }
-    .hub-sidebar-ig a {
-      color: var(--gray);
-      transition: color 0.2s;
-      display: flex;
-    }
-    .hub-sidebar-ig a:hover { color: var(--gold); }
-
-    /* Rating badge */
-    .hub-rating {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .hub-rating-stars { color: var(--gold); font-size: 0.7rem; }
-    .hub-rating-text {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.55rem;
-      letter-spacing: 0.1em;
-      color: var(--gray);
-      text-transform: uppercase;
-    }
+    .hub-sidebar-ig a { color: #888; transition: color 0.2s; display: flex; }
+    .hub-sidebar-ig a:hover { color: #c9a84c; }
 
     /* ── MOBILE ── */
     @media (max-width: 768px) {
-      html, body { height: auto; overflow: auto; }
       .hub {
-        height: 100svh;
         grid-template-columns: 1fr;
-        overflow: visible;
+        height: 100svh;        /* exact viewport height on mobile */
       }
       .hub-sidebar { display: none; }
       .hub-main {
         height: 100svh;
-        padding: 28px 24px 28px;
+        padding: 28px 24px;
       }
-      .hub-center { padding: 8px 0; }
       .hub-logo-desktop img { height: 100px; }
-      .hub-logo-desktop { margin-bottom: 14px; }
+      .hub-logo-desktop { margin-bottom: 16px; }
       .hub-link { padding: 13px 4px; }
       .hub-link-name { font-size: clamp(1.8rem, 9vw, 3rem); }
-      .hub-link-sub { display: none !important; }
       .hub-link:hover { padding-left: 12px; }
       .hub-address, .hub-hours { font-size: 0.5rem; }
     }
     @media (max-width: 480px) {
-      .hub-main { padding: 22px 20px 22px; }
-      .hub-logo-desktop img { height: 80px; }
-      .hub-logo-desktop { margin-bottom: 10px; }
+      .hub-main { padding: 22px 20px; }
+      .hub-logo-desktop img { height: 78px; }
+      .hub-logo-desktop { margin-bottom: 12px; }
       .hub-link { padding: 11px 4px; }
       .hub-link-name { font-size: clamp(1.5rem, 8.5vw, 2.4rem); }
+      .hub-address, .hub-hours { font-size: 0.46rem; letter-spacing: 0.08em; }
     }
   </style>
 </head>
@@ -319,64 +326,54 @@
 <div class="hub">
 
   <div class="hub-main">
-    <!-- Top controls (rating + lang) — fixed top-right -->
+
+    <!-- TOP: rating + lang -->
     <div class="hub-top">
-      <div style="display:flex;align-items:center;gap:16px;margin-left:auto;">
-        <div class="hub-rating">
-          <span class="hub-rating-stars">★★★★★</span>
-          <span class="hub-rating-text">4.9 · 128 Reviews</span>
-        </div>
-        <button class="hub-lang" id="langBtn">EN</button>
+      <div class="hub-rating">
+        <span class="hub-rating-stars">★★★★★</span>
+        <span class="hub-rating-text">4.9 · 128 Reviews</span>
       </div>
+      <button class="hub-lang" id="langBtn">EN</button>
     </div>
 
-    <!-- Logo + Nav grouped and centered -->
+    <!-- CENTER: logo + nav -->
     <div class="hub-center">
       <a href="index.html" class="hub-logo-desktop">
         <img src="nr40-logo.png" alt="NR40 Urban Arts">
       </a>
-
       <nav class="hub-nav" aria-label="Main navigation">
-
-      <a href="nr40.html" class="hub-link">
-        <span class="hub-link-num">01</span>
-        <span class="hub-link-name">NR40</span>
-        <span class="hub-link-sub" data-gr="Ο χώρος μας" data-en="Our studio">Ο χώρος μας</span>
-        <span class="hub-link-arrow">→</span>
-      </a>
-
-      <a href="team.html" class="hub-link">
-        <span class="hub-link-num">02</span>
-        <span class="hub-link-name" data-gr="TATTOO" data-en="TATTOO">TATTOO</span>
-        <span class="hub-link-sub" data-gr="Καλλιτέχνες & Κράτηση" data-en="Artists & Booking">Καλλιτέχνες & Κράτηση</span>
-        <span class="hub-link-arrow">→</span>
-      </a>
-
-      <a href="piercing.html" class="hub-link">
-        <span class="hub-link-num">03</span>
-        <span class="hub-link-name">PIERCING</span>
-        <span class="hub-link-sub" data-gr="Κλείσε Ραντεβού" data-en="Book Appointment">Κλείσε Ραντεβού</span>
-        <span class="hub-link-arrow">→</span>
-      </a>
-
-      <a href="contact.html" class="hub-link">
-        <span class="hub-link-num">04</span>
-        <span class="hub-link-name" data-gr="ΕΠΙΚΟΙΝΩΝΙΑ" data-en="CONTACT">ΕΠΙΚΟΙΝΩΝΙΑ</span>
-        <span class="hub-link-sub" data-gr="Βρες μας" data-en="Find us">Βρες μας</span>
-        <span class="hub-link-arrow">→</span>
-      </a>
-
-    </nav>
-    </div><!-- /.hub-center -->
-
-    <!-- Bottom -->
-    <div class="hub-bottom">
-      <span class="hub-address" data-gr="Κανιγγός 27 · Αθήνα 106 82" data-en="Kaniggos 27 · Athens 106 82">Κανιγγός 27 · Αθήνα 106 82</span>
-      <span class="hub-hours" data-gr="Δευ–Σαβ <span>11:00–20:00</span>" data-en="Mon–Sat <span>11:00–20:00</span>">Δευ–Σαβ <span>11:00–20:00</span></span>
+        <a href="nr40.html" class="hub-link">
+          <span class="hub-link-num">01</span>
+          <span class="hub-link-name">NR40</span>
+          <span class="hub-link-arrow">→</span>
+        </a>
+        <a href="team.html" class="hub-link">
+          <span class="hub-link-num">02</span>
+          <span class="hub-link-name">TATTOO</span>
+          <span class="hub-link-arrow">→</span>
+        </a>
+        <a href="piercing.html" class="hub-link">
+          <span class="hub-link-num">03</span>
+          <span class="hub-link-name">PIERCING</span>
+          <span class="hub-link-arrow">→</span>
+        </a>
+        <a href="contact.html" class="hub-link">
+          <span class="hub-link-num">04</span>
+          <span class="hub-link-name" id="contactLinkName">ΕΠΙΚΟΙΝΩΝΙΑ</span>
+          <span class="hub-link-arrow">→</span>
+        </a>
+      </nav>
     </div>
+
+    <!-- BOTTOM: address + hours -->
+    <div class="hub-bottom">
+      <span class="hub-address" id="hubAddress">Κανιγγός 27 · Αθήνα 106 82</span>
+      <span class="hub-hours" id="hubHours">Δευ–Σαβ <span>11:00–20:00</span></span>
+    </div>
+
   </div>
 
-  <!-- Right strip -->
+  <!-- RIGHT STRIP -->
   <div class="hub-sidebar">
     <div class="hub-sidebar-dot"></div>
     <span class="hub-sidebar-text">NR40 URBAN ARTS · ATHENS · GREECE</span>
@@ -393,40 +390,56 @@
 </div>
 
 <script>
-  // Loader
-  window.addEventListener('load', () => {
-    setTimeout(() => {
+  // ── LOADER ──
+  window.addEventListener('load', function() {
+    setTimeout(function() {
       document.getElementById('loader').classList.add('hide');
-      setTimeout(() => {
-        document.querySelectorAll('.hub-link').forEach(el => el.classList.add('visible'));
+      setTimeout(function() {
+        document.querySelectorAll('.hub-link').forEach(function(el) {
+          el.classList.add('visible');
+        });
       }, 400);
     }, 900);
   });
 
-  document.addEventListener('DOMContentLoaded', () => {
-    let hubLang = localStorage.getItem('lang') || 'gr';
-    const langBtn = document.getElementById('langBtn');
-
-    function applyHubLang() {
-      document.querySelectorAll('[data-gr]').forEach(el => {
-        const val = el.getAttribute('data-' + hubLang);
-        if (!val) return;
-        if (val.includes('<')) el.innerHTML = val;
-        else el.textContent = val;
-      });
-      langBtn.textContent = hubLang === 'gr' ? 'EN' : 'ΕΛ';
-      document.documentElement.lang = hubLang === 'gr' ? 'el' : 'en';
+  // ── LANG ──
+  // Script is at bottom of body — DOM is ready, no DOMContentLoaded needed
+  var translations = {
+    gr: {
+      contact:  'ΕΠΙΚΟΙΝΩΝΙΑ',
+      address:  'Κανιγγός 27 · Αθήνα 106 82',
+      hours:    'Δευ–Σαβ <span>11:00–20:00</span>',
+      btn:      'EN'
+    },
+    en: {
+      contact:  'CONTACT',
+      address:  'Kaniggos 27 · Athens 106 82',
+      hours:    'Mon–Sat <span>11:00–20:00</span>',
+      btn:      'ΕΛ'
     }
+  };
 
-    langBtn.addEventListener('click', () => {
-      hubLang = hubLang === 'gr' ? 'en' : 'gr';
-      localStorage.setItem('lang', hubLang);
-      applyHubLang();
-    });
+  var lang = localStorage.getItem('lang') || 'gr';
+  var langBtn = document.getElementById('langBtn');
 
-    applyHubLang();
+  function applyLang() {
+    var t = translations[lang];
+    document.getElementById('contactLinkName').textContent = t.contact;
+    document.getElementById('hubAddress').textContent      = t.address;
+    document.getElementById('hubHours').innerHTML          = t.hours;
+    langBtn.textContent = t.btn;
+    document.documentElement.lang = lang === 'gr' ? 'el' : 'en';
+  }
+
+  langBtn.addEventListener('click', function() {
+    lang = lang === 'gr' ? 'en' : 'gr';
+    localStorage.setItem('lang', lang);
+    applyLang();
   });
+
+  applyLang();
 </script>
+
 <script>window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
