@@ -56,7 +56,7 @@ nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 22px 56px;
+  padding: 16px 56px;
   transition: background 0.4s, border-color 0.4s;
   border-bottom: 1px solid transparent;
 }
@@ -76,7 +76,7 @@ nav.scrolled {
   flex-shrink: 0;
 }
 .nav-logo-img {
-  height: 44px;
+  height: 72px;   /* ← was 44px */
   width: auto;
   display: block;
   object-fit: contain;
@@ -194,7 +194,7 @@ nav.scrolled {
 
 /* ─── PAGE HEADER ─── */
 .page-header {
-  padding: 160px 0 80px;
+  padding: 170px 0 80px;  /* ← bumped from 160px to clear taller nav */
   border-bottom: 1px solid var(--border);
   position: relative;
   overflow: hidden;
@@ -239,10 +239,8 @@ nav.scrolled {
 .gold-rule { width: 44px; height: 1px; background: var(--gold); margin: 28px 0; }
 
 /* ─── CONSISTENT FONT SIZES — EN & GR ─── */
-/* Body text: Cormorant Garamond — same size regardless of language */
 p, li, td, th { font-size: 1.1rem; }
 
-/* All Space Mono UI labels — bump up so English is readable */
 .label,
 .form-label,
 .info-card-title,
@@ -262,7 +260,6 @@ p, li, td, th { font-size: 1.1rem; }
   font-size: 0.68rem;
 }
 
-/* Keep tiny decorative labels at their intentional small sizes */
 .artist-role-tag,
 .portfolio-btn,
 .g-artist-name,
@@ -484,7 +481,6 @@ p, li, td, th { font-size: 1.1rem; }
 footer { background: var(--dark); border-top: 1px solid var(--border); padding: 64px 0 32px; }
 .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 64px; margin-bottom: 52px; }
 
-/* Footer logo + tagline side by side */
 .footer-logo-row {
   display: flex;
   align-items: center;
@@ -494,7 +490,7 @@ footer { background: var(--dark); border-top: 1px solid var(--border); padding: 
 }
 .footer-logo-link { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
 .footer-logo-img {
-  height: 56px;
+  height: 64px;   /* ← was 56px */
   width: auto;
   display: block;
   object-fit: contain;
@@ -575,7 +571,7 @@ footer { background: var(--dark); border-top: 1px solid var(--border); padding: 
 }
 
 @media (max-width: 900px) {
-  nav { padding: 16px 24px; }
+  nav { padding: 12px 24px; }
   .nav-links, .nav-cta-btn, .lang-btn { display: none; }
   .hamburger { display: flex; }
   .container, .container-narrow { padding: 0 24px; }
@@ -586,37 +582,22 @@ footer { background: var(--dark); border-top: 1px solid var(--border); padding: 
   .form-wrap { padding: 32px; }
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
   .footer-bottom { flex-direction: column; gap: 8px; text-align: center; }
-  .nav-logo-img { height: 36px; }
-  .footer-logo-img { height: 48px; }
-  /* Page header: generous top padding to clear mobile nav */
-  .page-header { padding: 120px 0 60px; }
-  /* Footer logo row wraps gracefully on narrow screens */
+  .nav-logo-img { height: 52px; }   /* ← was 36px */
+  .footer-logo-img { height: 52px; }
+  .page-header { padding: 130px 0 60px; }  /* ← bumped to clear taller mobile nav */
   .footer-logo-row { gap: 12px; }
 }
 
-/* ─── HERO CONTENT: push below fixed nav on all screen sizes ─── */
-/* On large desktops, hero is 100vh centered — content naturally clears nav */
-/* On medium laptops (900–1200px), center shifts up — add padding to compensate */
 @media (max-width: 1200px) and (min-width: 901px) {
-  .hero-content {
-    padding-top: 100px;
-  }
+  .hero-content { padding-top: 100px; }
 }
-/* On short/wide screens the hero scroll can sit too high — keep it out of the way */
 @media (max-width: 1024px) and (min-width: 601px) {
-  .hero-scroll {
-    bottom: 20px;
-    /* Prevent the scroll indicator from overlapping with next section on short screens */
-    pointer-events: none;
-  }
+  .hero-scroll { bottom: 20px; pointer-events: none; }
 }
 
-/* Small phones */
 @media (max-width: 600px) {
-  /* Hide scroll indicator entirely on mobile — avoids overlapping CTA buttons */
   .hero-scroll { display: none !important; }
-  .page-header { padding: 110px 0 52px; }
-  /* Hero content: push down so eyebrow text clears the mobile nav (height ~64px) */
+  .page-header { padding: 120px 0 52px; }
   .hero-content { padding-top: 72px; }
 }
 
