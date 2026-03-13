@@ -38,7 +38,10 @@
   <script defer src="/_vercel/insights/script.js"></script>
 
   <style>
-    html, body { height: 100%; overflow: hidden; }
+    /* Desktop only — lock to viewport so hub fills screen without scroll */
+    @media (min-width: 769px) {
+      html, body { height: 100%; overflow: hidden; }
+    }
 
     /* ── LOADER ── */
     #loader {
@@ -276,17 +279,20 @@
 
     /* ── MOBILE ── */
     @media (max-width: 768px) {
-      html, body { overflow: auto; }
+      html, body { height: auto; overflow: auto; }
       .hub {
-        height: 100svh;
+        height: auto;
         min-height: 100svh;
         grid-template-columns: 1fr;
       }
       .hub-sidebar { display: none; }
-      .hub-main { padding: 24px 24px 28px; }
-      .hub-center { padding: 16px 0 8px; }
-      .hub-logo-desktop img { height: 110px; }
-      .hub-logo-desktop { margin-bottom: 16px; }
+      .hub-main {
+        padding: 24px 24px 28px;
+        min-height: 100svh;
+      }
+      .hub-center { padding: 12px 0 8px; }
+      .hub-logo-desktop img { height: 100px; }
+      .hub-logo-desktop { margin-bottom: 14px; }
       .hub-link { padding: 13px 4px; }
       .hub-link-name { font-size: clamp(1.8rem, 9vw, 3rem); }
       .hub-link-sub { display: none !important; }
@@ -295,9 +301,10 @@
     }
     @media (max-width: 480px) {
       .hub-main { padding: 20px 20px 24px; }
-      .hub-logo-desktop img { height: 88px; }
-      .hub-logo-desktop { margin-bottom: 12px; }
-      .hub-link-name { font-size: clamp(1.6rem, 8.5vw, 2.6rem); }
+      .hub-logo-desktop img { height: 80px; }
+      .hub-logo-desktop { margin-bottom: 10px; }
+      .hub-link { padding: 11px 4px; }
+      .hub-link-name { font-size: clamp(1.5rem, 8.5vw, 2.4rem); }
     }
   </style>
 </head>
@@ -385,7 +392,6 @@
 
 </div>
 
-<script src="js/main.js"></script>
 <script>
   // Loader
   window.addEventListener('load', () => {
