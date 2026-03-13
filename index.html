@@ -82,10 +82,13 @@
       justify-content: space-between;
     }
     .hub-logo-desktop {
-      display: block;
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-bottom: 8px;
     }
     .hub-logo-desktop img {
-      height: 56px; width: auto;
+      height: 180px; width: auto;
     }
     .hub-lang {
       font-family: 'Space Mono', monospace;
@@ -99,6 +102,13 @@
       transition: all 0.2s;
     }
     .hub-lang:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* Top bar */
+    .hub-top {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+    }
 
     /* Center nav links */
     .hub-nav {
@@ -265,13 +275,13 @@
     @media (max-width: 768px) {
       html, body { overflow: auto; }
       .hub {
-        height: 100svh;
-        grid-template-columns: 1fr;
+        height: auto;
         min-height: 100svh;
+        grid-template-columns: 1fr;
       }
       .hub-sidebar { display: none; }
       .hub-main { padding: 28px 24px 32px; }
-      .hub-logo-desktop img { height: 36px; }
+      .hub-logo-desktop img { height: 110px; }
       .hub-link { padding: 14px 4px; }
       .hub-link-name { font-size: clamp(1.8rem, 9vw, 3rem); }
       .hub-link-sub { display: none !important; }
@@ -280,6 +290,7 @@
     }
     @media (max-width: 480px) {
       .hub-main { padding: 24px 20px 28px; }
+      .hub-logo-desktop img { height: 90px; }
       .hub-link-name { font-size: clamp(1.6rem, 8.5vw, 2.6rem); }
     }
   </style>
@@ -295,12 +306,9 @@
 <div class="hub">
 
   <div class="hub-main">
-    <!-- Top -->
+    <!-- Top controls (rating + lang) — fixed top-right -->
     <div class="hub-top">
-      <a href="index.html" class="hub-logo-desktop">
-        <img src="nr40-logo.png" alt="NR40 Urban Arts">
-      </a>
-      <div style="display:flex;align-items:center;gap:16px;">
+      <div style="display:flex;align-items:center;gap:16px;margin-left:auto;">
         <div class="hub-rating">
           <span class="hub-rating-stars">★★★★★</span>
           <span class="hub-rating-text">4.9 · 128 Reviews</span>
@@ -308,6 +316,11 @@
         <button class="hub-lang" id="langBtn">EN</button>
       </div>
     </div>
+
+    <!-- Large centered logo -->
+    <a href="index.html" class="hub-logo-desktop">
+      <img src="nr40-logo.png" alt="NR40 Urban Arts">
+    </a>
 
     <!-- Nav links -->
     <nav class="hub-nav" aria-label="Main navigation">
