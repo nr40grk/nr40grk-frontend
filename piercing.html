@@ -13,8 +13,15 @@
     .deposit-notice-icon { font-size:1.4rem;color:var(--gold);flex-shrink:0; }
     .deposit-notice p { font-family:'Space Mono',monospace;font-size:0.62rem;letter-spacing:0.08em;color:var(--gray-light);line-height:1.7;text-transform:uppercase; }
     .deposit-notice strong { color:var(--gold); }
-    .stripe-payment-section { display:none;background:var(--card);border:1px solid var(--gold);padding:36px;margin-top:24px; }
-    .stripe-payment-section.visible { display:block; }
+
+    /* Steps */
+    .step-section { display:none; }
+    .step-section.active { display:block; }
+    .step-header { background:var(--dark);border:1px solid var(--border);padding:16px 20px;margin-bottom:24px;display:flex;align-items:center;gap:12px; }
+    .step-num { font-family:'Unbounded',sans-serif;font-size:1.2rem;font-weight:900;color:var(--gold); }
+    .step-label { font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--gray-light); }
+
+    .stripe-payment-section { background:var(--card);border:1px solid var(--gold);padding:36px;margin-top:24px; }
     .stripe-section-title { font-family:'Unbounded',sans-serif;font-size:0.88rem;letter-spacing:0.08em;color:var(--gold);margin-bottom:8px;text-transform:uppercase; }
     .stripe-section-sub { font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;color:var(--gray);text-transform:uppercase;margin-bottom:28px; }
     #payment-element { margin-bottom:24px; }
@@ -29,17 +36,16 @@
     .booking-success { display:none;background:rgba(39,174,96,0.08);border:1px solid var(--green);padding:40px;text-align:center;margin-top:24px; }
     .booking-success.visible { display:block; }
     .booking-success h3 { font-family:'Unbounded',sans-serif;font-size:0.9rem;letter-spacing:0.08em;color:var(--green);margin-bottom:12px; }
-    .booking-success p { color:var(--gray-light);font-style:italic;font-size:1.05rem; }
+    .booking-success p { color:var(--gray-light);font-size:1.05rem; }
     .form-input.invalid { border-color:var(--red)!important; }
     .form-input.valid { border-color:rgba(39,174,96,0.5)!important; }
+    .calendly-confirmed-badge { background:rgba(39,174,96,0.1);border:1px solid var(--green);padding:14px 20px;font-family:'Space Mono',monospace;font-size:0.62rem;color:var(--green);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:20px; }
   </style>
 </head>
 <body>
 
 <nav id="navbar">
-  <a href="index.html" class="nav-logo">
-    <img src="nr40-logo.png" alt="NR40 Urban Arts" class="nav-logo-img">
-  </a>
+  <a href="index.html" class="nav-logo"><img src="nr40-logo.png" alt="NR40 Urban Arts" class="nav-logo-img"></a>
   <ul class="nav-links">
     <li><a href="nr40.html" data-gr="NR40" data-en="NR40">NR40</a></li>
     <li><a href="team.html" data-gr="Tattoo" data-en="Tattoo">Tattoo</a></li>
@@ -47,9 +53,7 @@
     <li><a href="nr40.html#events" data-gr="Events" data-en="Events">Events</a></li>
     <li><a href="contact.html" data-gr="Επικοινωνία" data-en="Contact">Επικοινωνία</a></li>
   </ul>
-  <div class="nav-right">
-    <button class="lang-btn" id="langBtn">EN</button>
-  </div>
+  <div class="nav-right"><button class="lang-btn" id="langBtn">EN</button></div>
   <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
@@ -64,124 +68,117 @@
 <header class="page-header" data-title="PIERCING">
   <div class="container">
     <span class="label" data-gr="Κράτηση Piercing" data-en="Book Piercing">Κράτηση Piercing</span>
-    <h1 class="heading" style="font-size:clamp(2.2rem,5vw,4rem);margin-bottom:20px;" data-gr="Piercing <em>Ραντεβού</em>" data-en="Piercing <em>Appointment</em>">Piercing <em>Ραντεβού</em></h1>
+    <h1 class="heading" style="font-size:clamp(2.2rem,5vw,4rem);margin-bottom:20px;" data-gr="Piercing Ραντεβού" data-en="Piercing Appointment">Piercing <em>Ραντεβού</em></h1>
     <div class="gold-rule"></div>
-    <p style="color:var(--gray-light);font-style:italic;max-width:480px;" data-gr="Επέλεξε ημερομηνία και ώρα online. Απαιτείται προκαταβολή €12 με κάρτα." data-en="Select your date and time online. A €12 card deposit is required.">Επέλεξε ημερομηνία και ώρα online. Απαιτείται προκαταβολή €12 με κάρτα.</p>
+    <p style="color:var(--gray-light);max-width:480px;" data-gr="Επέλεξε πρώτα ημερομηνία, μετά πλήρωσε προκαταβολή €12.50." data-en="First select a date, then pay the €12.50 deposit.">Επέλεξε πρώτα ημερομηνία, μετά πλήρωσε προκαταβολή €12.50.</p>
   </div>
 </header>
 
 <div class="container">
   <div class="split-layout">
-    <div class="form-wrap">
-      <form id="piercingForm" novalidate>
+    <div>
 
-        <div class="form-grid-2">
-          <div class="form-group">
-            <label class="form-label" for="fullName" data-gr="Ονοματεπώνυμο *" data-en="Full Name *">Ονοματεπώνυμο *</label>
-            <input class="form-input" type="text" id="fullName" name="fullName" required
-              data-ph-gr="π.χ. Νίκος Παπαδόπουλος" data-ph-en="e.g. Nikos Papadopoulos"
-              placeholder="π.χ. Νίκος Παπαδόπουλος">
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="phone" data-gr="Τηλέφωνο *" data-en="Phone *">Τηλέφωνο *</label>
-            <input class="form-input" type="tel" id="phone" name="phone" required
-              inputmode="tel" autocomplete="tel"
-              data-ph-gr="π.χ. 6912345678" data-ph-en="e.g. +30 6912345678"
-              placeholder="π.χ. 6912345678">
-          </div>
+      <!-- STEP 1: Details + Calendly -->
+      <div class="step-section active" id="step1">
+        <div class="step-header">
+          <span class="step-num">1</span>
+          <span class="step-label" data-gr="Συμπλήρωσε στοιχεία & επέλεξε ημερομηνία" data-en="Fill details & select date">Συμπλήρωσε στοιχεία & επέλεξε ημερομηνία</span>
         </div>
+        <div class="form-wrap">
+          <form id="piercingForm" novalidate>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label" for="fullName" data-gr="Ονοματεπώνυμο *" data-en="Full Name *">Ονοματεπώνυμο *</label>
+                <input class="form-input" type="text" id="fullName" required data-ph-gr="π.χ. Νίκος Παπαδόπουλος" data-ph-en="e.g. Nikos Papadopoulos" placeholder="π.χ. Νίκος Παπαδόπουλος">
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="phone" data-gr="Τηλέφωνο *" data-en="Phone *">Τηλέφωνο *</label>
+                <input class="form-input" type="tel" id="phone" required inputmode="tel" autocomplete="tel" data-ph-gr="π.χ. 6912345678" data-ph-en="e.g. +30 6912345678" placeholder="π.χ. 6912345678">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="email" data-gr="Email *" data-en="Email *">Email *</label>
+              <input class="form-input" type="email" id="email" required placeholder="your@email.com" inputmode="email" autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="piercingType" data-gr="Τύπος Piercing *" data-en="Piercing Type *">Τύπος Piercing *</label>
+              <select class="form-select" id="piercingType" required>
+                <option value="" disabled selected data-gr="Επέλεξε τύπο" data-en="Select type">Επέλεξε τύπο</option>
+                <option value="Tooth Gem">Tooth Gem</option>
+                <option value="Ear - Earlobe" data-gr="Αυτί — Λοβός (€20)" data-en="Ear — Earlobe (€20)">Αυτί — Λοβός (€20)</option>
+                <option value="Ear - Helix / Forward Helix" data-gr="Αυτί — Helix / Forward Helix (€30)" data-en="Ear — Helix / Forward Helix (€30)">Αυτί — Helix / Forward Helix (€30)</option>
+                <option value="Ear - Conch / Tragus" data-gr="Αυτί — Conch / Tragus (€30)" data-en="Ear — Conch / Tragus (€30)">Αυτί — Conch / Tragus (€30)</option>
+                <option value="Ear - Rook / Daith / Anti-Tragus" data-gr="Αυτί — Rook / Daith / Anti-Tragus (€40)" data-en="Ear — Rook / Daith / Anti-Tragus (€40)">Αυτί — Rook / Daith / Anti-Tragus (€40)</option>
+                <option value="Ear - Industrial" data-gr="Αυτί — Industrial (€40)" data-en="Ear — Industrial (€40)">Αυτί — Industrial (€40)</option>
+                <option value="Nose - Nostril / Septum" data-gr="Μύτη — Nostril / Septum (€30)" data-en="Nose — Nostril / Septum (€30)">Μύτη — Nostril / Septum (€30)</option>
+                <option value="Eyebrow" data-gr="Φρύδι (€35)" data-en="Eyebrow (€35)">Φρύδι (€35)</option>
+                <option value="Bridge" data-gr="Bridge (€45)" data-en="Bridge (€45)">Bridge (€45)</option>
+                <option value="Lip / Web / Smiley" data-gr="Χείλος / Web / Smiley (€30)" data-en="Lip / Web / Smiley (€30)">Χείλος / Web / Smiley (€30)</option>
+                <option value="Tongue" data-gr="Γλώσσα (€40)" data-en="Tongue (€40)">Γλώσσα (€40)</option>
+                <option value="Dahlias" data-gr="Dahlias (€80)" data-en="Dahlias (€80)">Dahlias (€80)</option>
+                <option value="Navel" data-gr="Αφαλός (€40)" data-en="Navel (€40)">Αφαλός (€40)</option>
+                <option value="Nipple Single" data-gr="Θηλή — Μονή (€50)" data-en="Nipple — Single (€50)">Θηλή — Μονή (€50)</option>
+                <option value="Nipples Pair" data-gr="Θηλές — Ζεύγος (€90)" data-en="Nipples — Pair (€90)">Θηλές — Ζεύγος (€90)</option>
+                <option value="Other" data-gr="Άλλο" data-en="Other">Άλλο</option>
+              </select>
+              <p class="form-hint" data-gr="Τιμές δεν περιλαμβάνουν ΦΠΑ 24%. Περιλαμβάνεται βασικό τιτάνιο κόσμημα." data-en="Prices exclude 24% VAT. Basic titanium jewelry included.">Τιμές δεν περιλαμβάνουν ΦΠΑ 24%. Περιλαμβάνεται βασικό τιτάνιο κόσμημα.</p>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="message" data-gr="Σημειώσεις" data-en="Notes">Σημειώσεις</label>
+              <textarea class="form-textarea" id="message" data-ph-gr="Οποιεσδήποτε επιπλέον πληροφορίες..." data-ph-en="Any additional information..." placeholder="Οποιεσδήποτε επιπλέον πληροφορίες..." style="min-height:80px;"></textarea>
+            </div>
+            <div id="formAlert" class="alert"></div>
+          </form>
 
-        <div class="form-group">
-          <label class="form-label" for="email" data-gr="Email *" data-en="Email *">Email *</label>
-          <input class="form-input" type="email" id="email" name="email" required
-            placeholder="your@email.com" inputmode="email" autocomplete="email">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="piercingType" data-gr="Τύπος Piercing *" data-en="Piercing Type *">Τύπος Piercing *</label>
-          <select class="form-select" id="piercingType" name="piercingType" required>
-            <option value="" disabled selected data-gr="Επέλεξε τύπο" data-en="Select type">Επέλεξε τύπο</option>
-            <option value="Tooth Gem">Tooth Gem</option>
-            <option value="Ear - Lobe" data-gr="Αυτί — Λοβός" data-en="Ear — Lobe">Αυτί — Λοβός</option>
-            <option value="Ear - Helix" data-gr="Αυτί — Helix" data-en="Ear — Helix">Αυτί — Helix</option>
-            <option value="Ear - Tragus" data-gr="Αυτί — Tragus" data-en="Ear — Tragus">Αυτί — Tragus</option>
-            <option value="Ear - Daith" data-gr="Αυτί — Daith" data-en="Ear — Daith">Αυτί — Daith</option>
-            <option value="Nose - Nostril" data-gr="Μύτη — Nostril" data-en="Nose — Nostril">Μύτη — Nostril</option>
-            <option value="Nose - Septum" data-gr="Μύτη — Septum" data-en="Nose — Septum">Μύτη — Septum</option>
-            <option value="Eyebrow" data-gr="Φρύδι" data-en="Eyebrow">Φρύδι</option>
-            <option value="Lip" data-gr="Χείλος" data-en="Lip">Χείλος</option>
-            <option value="Belly Button" data-gr="Αφαλός" data-en="Belly Button">Αφαλός</option>
-            <option value="Other" data-gr="Άλλο" data-en="Other">Άλλο</option>
-          </select>
-        </div>
-
-        <!-- Calendly -->
-        <div class="form-group">
-          <label class="form-label" data-gr="Επέλεξε Ημερομηνία & Ώρα *" data-en="Select Date & Time *">Επέλεξε Ημερομηνία & Ώρα *</label>
-          <div class="cal-embed-wrap">
-            <iframe
-              src="https://calendly.com/nr40athens-info/30min"
-              id="calendlyIframe"
-              title="Book piercing appointment"
-              loading="lazy">
-            </iframe>
-          </div>
-          <p class="form-hint" data-gr="Επέλεξε διαθέσιμη ημερομηνία και ώρα από το ημερολόγιο του Storm." data-en="Select an available date and time from Storm's calendar.">Επέλεξε διαθέσιμη ημερομηνία και ώρα από το ημερολόγιο του Storm.</p>
-        </div>
-
-        <!-- Deposit notice -->
-        <div class="form-group">
-          <label class="form-label" data-gr="Προκαταβολή" data-en="Deposit">Προκαταβολή</label>
-          <div class="deposit-notice">
-            <div class="deposit-notice-icon">◈</div>
-            <p data-gr="Απαιτείται προκαταβολή <strong>€12</strong> με κάρτα. Θα εισαχθεί μετά την υποβολή της φόρμας." data-en="A <strong>€12</strong> card deposit is required. You will be prompted to pay after submitting the form.">Απαιτείται προκαταβολή <strong>€12</strong> με κάρτα. Θα εισαχθεί μετά την υποβολή της φόρμας.</p>
+          <!-- Calendly embed (always visible) -->
+          <div class="form-group" style="margin-top:24px;">
+            <label class="form-label" data-gr="Επέλεξε Ημερομηνία & Ώρα *" data-en="Select Date & Time *">Επέλεξε Ημερομηνία & Ώρα *</label>
+            <div class="cal-embed-wrap">
+              <iframe src="https://calendly.com/nr40athens-info/30min?background_color=0f0f0f&text_color=f0ece4&primary_color=c9a84c&hide_event_type_details=1&hide_gdpr_banner=1" id="calendlyIframe" title="Book piercing appointment" loading="lazy"></iframe>
+            </div>
+            <p class="form-hint" data-gr="Αφού επιλέξεις ημερομηνία και ολοκληρώσεις στο Calendly, θα εμφανιστεί η πληρωμή προκαταβολής." data-en="After selecting a date and completing on Calendly, the deposit payment will appear.">Αφού επιλέξεις ημερομηνία, θα εμφανιστεί η πληρωμή προκαταβολής.</p>
           </div>
         </div>
-
-        <div class="form-group">
-          <label class="form-label" for="message" data-gr="Σημειώσεις" data-en="Notes">Σημειώσεις</label>
-          <textarea class="form-textarea" id="message" name="message"
-            data-ph-gr="Οποιεσδήποτε επιπλέον πληροφορίες..."
-            data-ph-en="Any additional information..."
-            placeholder="Οποιεσδήποτε επιπλέον πληροφορίες..."></textarea>
-        </div>
-
-        <button type="submit" class="submit-btn" id="submitBtn">
-          <span class="btn-text" data-gr="Υποβολή & Πληρωμή" data-en="Submit & Pay">Υποβολή & Πληρωμή</span>
-          <span class="btn-spinner"></span>
-        </button>
-        <div class="alert" id="formAlert"></div>
-      </form>
-
-      <div class="stripe-payment-section" id="stripePaymentSection">
-        <div class="stripe-section-title" data-gr="Πληρωμή Προκαταβολής" data-en="Pay Deposit">Πληρωμή Προκαταβολής</div>
-        <div class="stripe-section-sub" data-gr="Ασφαλής πληρωμή €12 με κάρτα — powered by Stripe" data-en="Secure €12 card payment — powered by Stripe">Ασφαλής πληρωμή €12 με κάρτα — powered by Stripe</div>
-        <div id="payment-element"></div>
-        <div id="stripe-error"></div>
-        <button id="stripe-pay-btn" type="button">
-          <span class="btn-text" data-gr="Πλήρωσε €12 →" data-en="Pay €12 →">Πλήρωσε €12 →</span>
-          <span class="btn-spinner"></span>
-        </button>
       </div>
 
+      <!-- STEP 2: Payment (shown after Calendly) -->
+      <div class="step-section" id="step2">
+        <div class="step-header">
+          <span class="step-num">2</span>
+          <span class="step-label" data-gr="Πληρωμή Προκαταβολής €12.50" data-en="Pay €12.50 Deposit">Πληρωμή Προκαταβολής €12.50</span>
+        </div>
+        <div id="calendlyConfirmedBadge" class="calendly-confirmed-badge" style="display:none;" data-gr="✓ Ραντεβού επιβεβαιώθηκε στο Calendly. Ολοκλήρωσε την πληρωμή." data-en="✓ Appointment confirmed on Calendly. Complete your payment.">✓ Ραντεβού επιβεβαιώθηκε στο Calendly. Ολοκλήρωσε την πληρωμή.</div>
+        <div class="stripe-payment-section">
+          <div class="stripe-section-title" data-gr="Πληρωμή Προκαταβολής" data-en="Pay Deposit">Πληρωμή Προκαταβολής</div>
+          <div class="stripe-section-sub" data-gr="Ασφαλής πληρωμή €12.50 — powered by Stripe" data-en="Secure €12.50 payment — powered by Stripe">Ασφαλής πληρωμή €12.50 — powered by Stripe</div>
+          <div id="payment-element"></div>
+          <div id="stripe-error"></div>
+          <button id="stripe-pay-btn" type="button">
+            <span class="btn-text" data-gr="Πλήρωσε €12.50 →" data-en="Pay €12.50 →">Πλήρωσε €12.50 →</span>
+            <span class="btn-spinner"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Success -->
       <div class="booking-success" id="bookingSuccess">
         <h3 data-gr="✓ Κράτηση & Πληρωμή Επιβεβαιώθηκαν!" data-en="✓ Booking & Payment Confirmed!">✓ Κράτηση & Πληρωμή Επιβεβαιώθηκαν!</h3>
-        <p data-gr="Η κράτησή σου καταχωρήθηκε και η προκαταβολή πληρώθηκε. Θα επικοινωνήσουμε σύντομα." data-en="Your booking is confirmed and the deposit has been paid. We will be in touch shortly.">Η κράτησή σου καταχωρήθηκε και η προκαταβολή πληρώθηκε. Θα επικοινωνήσουμε σύντομα.</p>
+        <p data-gr="Η κράτησή σου καταχωρήθηκε και η προκαταβολή πληρώθηκε. Θα επικοινωνήσουμε σύντομα." data-en="Your booking is confirmed and the deposit has been paid. We will be in touch shortly.">Η κράτησή σου καταχωρήθηκε και η προκαταβολή πληρώθηκε.</p>
       </div>
+
     </div>
 
     <div class="sidebar">
       <div class="info-card">
         <div class="info-card-title" data-gr="Ωράριο Λειτουργίας" data-en="Opening Hours">Ωράριο Λειτουργίας</div>
-        <div class="info-row"><span class="info-icon">◷</span><span data-gr="Δευτέρα – Σάββατο: 11:00–21:00" data-en="Monday – Saturday: 11:00–21:00">Δευτέρα – Σάββατο: 11:00–21:00</span></div>
+        <div class="info-row"><span class="info-icon">◷</span><span data-gr="Δευτέρα – Σάββατο: 12:00–21:00" data-en="Monday – Saturday: 12:00–21:00">Δευτέρα – Σάββατο: 12:00–21:00</span></div>
         <div class="info-row"><span class="info-icon">◷</span><span data-gr="Κυριακή: Κλειστά" data-en="Sunday: Closed">Κυριακή: Κλειστά</span></div>
       </div>
       <div class="info-card">
         <div class="info-card-title" data-gr="Πληροφορίες Piercing" data-en="Piercing Info">Πληροφορίες Piercing</div>
-        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Καλλιτέχνης Piercing: Storm" data-en="Piercing Artist: Storm">Καλλιτέχνης Piercing: Storm</span></div>
-        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Προκαταβολή €12 για κάθε κράτηση" data-en="€12 deposit for all bookings">Προκαταβολή €12 για κάθε κράτηση</span></div>
+        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Καλλιτέχνης: Storm" data-en="Artist: Storm">Καλλιτέχνης: Storm</span></div>
+        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Προκαταβολή €12.50 για κάθε κράτηση" data-en="€12.50 deposit for all bookings">Προκαταβολή €12.50 για κάθε κράτηση</span></div>
         <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Ελάχιστη ηλικία: 18 ετών" data-en="Minimum age: 18 years">Ελάχιστη ηλικία: 18 ετών</span></div>
-        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Φέρε έγκυρη ταυτότητα" data-en="Bring valid ID">Φέρε έγκυρη ταυτότητα</span></div>
         <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Επιλογή ημερομηνίας online" data-en="Date selection online">Επιλογή ημερομηνίας online</span></div>
       </div>
     </div>
@@ -193,10 +190,8 @@
     <div class="footer-grid">
       <div>
         <div class="footer-logo-row">
-          <a href="index.html" class="footer-logo-link">
-            <img src="nr40-logo.png" alt="NR40 Urban Arts" class="footer-logo-img">
-          </a>
-          <p class="footer-desc" data-gr="Τέχνη που μένει για πάντα." data-en="Art that lasts forever.">Τέχνη που μένει για πάντα.</p>
+          <a href="index.html" class="footer-logo-link"><img src="nr40-logo.png" alt="NR40 Urban Arts" class="footer-logo-img"></a>
+          <p class="footer-desc">Urban Arts</p>
         </div>
       </div>
       <div>
@@ -230,6 +225,7 @@
   const STRIPE_PUBLISHABLE_KEY = 'pk_test_YOUR_PUBLISHABLE_KEY';
   let stripe = null;
   let stripeElements = null;
+  let calendlyBooked = false;
 
   const phoneInput = document.getElementById('phone');
   phoneInput.addEventListener('input', function() {
@@ -253,6 +249,7 @@
     this.classList.toggle('valid', isValidEmail(this.value));
   });
 
+  // Update Calendly URL with user's name/email for pre-fill
   function updateCalendlyUrl() {
     const name  = document.getElementById('fullName').value.trim();
     const email = document.getElementById('email').value.trim();
@@ -264,44 +261,53 @@
     });
     document.getElementById('calendlyIframe').src = base + '?' + params.toString();
   }
-  document.getElementById('fullName').addEventListener('input', updateCalendlyUrl);
-  document.getElementById('email').addEventListener('input', updateCalendlyUrl);
+  document.getElementById('fullName').addEventListener('change', updateCalendlyUrl);
+  document.getElementById('email').addEventListener('change', updateCalendlyUrl);
 
-  document.getElementById('piercingForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const phoneDigits = phoneInput.value.replace('+','');
-    if (phoneDigits.length < 7) {
-      phoneInput.classList.add('invalid');
-      return showAlert('formAlert','error','✕ Εισάγετε έγκυρο αριθμό τηλεφώνου.','✕ Please enter a valid phone number.');
-    }
-    if (!isValidEmail(emailInput.value.trim())) {
-      emailInput.classList.add('invalid');
-      return showAlert('formAlert','error','✕ Εισάγετε έγκυρη διεύθυνση email.','✕ Please enter a valid email address.');
-    }
-    if (!document.getElementById('piercingType').value) {
-      return showAlert('formAlert','error','✕ Παρακαλώ επέλεξε τύπο piercing.','✕ Please select a piercing type.');
-    }
-    const btn = document.getElementById('submitBtn');
-    btn.classList.add('loading'); btn.disabled = true;
-    try {
-      const data = await apiPost('/api/payment/create-intent', { amount: 1200, currency: 'eur' });
-      if (!data.clientSecret) throw new Error('No client secret');
-      if (!stripe) stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
-      stripeElements = stripe.elements({
-        clientSecret: data.clientSecret,
-        appearance: {
-          theme: 'night',
-          variables: { colorPrimary:'#c9a84c', colorBackground:'#141414', colorText:'#f0ece4', colorDanger:'#c0392b', fontFamily:'Space Mono, monospace', borderRadius:'0px' }
-        }
-      });
-      stripeElements.create('payment', { layout: 'tabs' }).mount('#payment-element');
-      document.getElementById('stripePaymentSection').classList.add('visible');
-      document.getElementById('stripePaymentSection').scrollIntoView({ behavior:'smooth', block:'center' });
-      btn.style.display = 'none';
-      applyLang();
-    } catch(err) {
-      showAlert('formAlert','error','✕ Σφάλμα σύνδεσης. Δοκίμασε ξανά.','✕ Connection error. Please try again.');
-      btn.classList.remove('loading'); btn.disabled = false;
+  // Listen for Calendly booking completion
+  window.addEventListener('message', async function(e) {
+    if (e.data && e.data.event === 'calendly.event_scheduled') {
+      // Validate form first
+      const phoneDigits = phoneInput.value.replace('+','');
+      if (!document.getElementById('fullName').value.trim()) {
+        return showAlert('formAlert','error','✕ Συμπλήρωσε το ονοματεπώνυμό σου.','✕ Please fill in your full name.');
+      }
+      if (phoneDigits.length < 7) {
+        return showAlert('formAlert','error','✕ Εισάγετε έγκυρο τηλέφωνο.','✕ Please enter a valid phone number.');
+      }
+      if (!isValidEmail(emailInput.value.trim())) {
+        return showAlert('formAlert','error','✕ Εισάγετε έγκυρο email.','✕ Please enter a valid email.');
+      }
+      if (!document.getElementById('piercingType').value) {
+        return showAlert('formAlert','error','✕ Επέλεξε τύπο piercing.','✕ Please select a piercing type.');
+      }
+
+      calendlyBooked = true;
+
+      // Initialize Stripe and show step 2
+      try {
+        const data = await apiPost('/api/payment/create-intent', {});
+        if (!data.clientSecret) throw new Error('No client secret');
+        if (!stripe) stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+        stripeElements = stripe.elements({
+          clientSecret: data.clientSecret,
+          appearance: {
+            theme: 'night',
+            variables: { colorPrimary:'#c9a84c', colorBackground:'#141414', colorText:'#f0ece4', colorDanger:'#c0392b', fontFamily:'Space Mono, monospace', borderRadius:'0px' }
+          }
+        });
+        stripeElements.create('payment', { layout: 'tabs' }).mount('#payment-element');
+
+        // Show step 2
+        document.getElementById('step1').classList.remove('active');
+        document.getElementById('step2').classList.add('active');
+        const badge = document.getElementById('calendlyConfirmedBadge');
+        badge.style.display = 'block';
+        applyLang();
+        document.getElementById('step2').scrollIntoView({ behavior:'smooth', block:'start' });
+      } catch(err) {
+        showAlert('formAlert','error','✕ Σφάλμα σύνδεσης. Δοκίμασε ξανά.','✕ Connection error. Please try again.');
+      }
     }
   });
 
@@ -325,16 +331,17 @@
         fd.append('artist', 'Storm');
         fd.append('service', 'Piercing');
         fd.append('message', document.getElementById('message').value.trim());
-        fd.append('depositAmount', '12');
+        fd.append('depositAmount', '12.50');
         fd.append('paymentIntentId', paymentIntent.id);
         await apiPostForm('/api/booking', fd);
-        document.getElementById('stripePaymentSection').classList.remove('visible');
+        document.getElementById('step2').classList.remove('active');
         document.getElementById('bookingSuccess').classList.add('visible');
         document.getElementById('bookingSuccess').scrollIntoView({ behavior:'smooth', block:'center' });
         applyLang();
       }
     } catch(err) {
-      errEl.textContent = lang === 'en' ? 'Payment failed. Please try again.' : 'Αποτυχία πληρωμής. Δοκίμασε ξανά.';
+      const l = localStorage.getItem('lang') || 'gr';
+      errEl.textContent = l === 'en' ? 'Payment failed. Please try again.' : 'Αποτυχία πληρωμής. Δοκίμασε ξανά.';
       this.classList.remove('loading'); this.disabled = false;
     }
   });

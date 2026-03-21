@@ -3,75 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tattoo — NR40</title>
+  <title>Κράτηση Τατουάζ — NR40</title>
   <link rel="stylesheet" href="css/style.css">
-  <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
-  <script defer src="/_vercel/insights/script.js"></script>
   <style>
-  .artists-section { padding: 80px 0 60px; }
-  .artists-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-  .artist-card { position: relative; overflow: hidden; cursor: pointer; background: var(--card); transition: outline 0.2s; }
-  .artist-card.highlighted { outline: 2px solid var(--gold); outline-offset: 2px; }
-  .artist-photo { aspect-ratio: 3/4; overflow: hidden; position: relative; }
-  .artist-photo img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(55%) contrast(1.1); transition: transform 0.7s ease, filter 0.5s; }
-  .artist-card:hover .artist-photo img { transform: scale(1.08); filter: grayscale(0%) contrast(1); }
-  .artist-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 48px 20px 28px; background: linear-gradient(to top, rgba(8,8,8,0.98) 0%, rgba(8,8,8,0.75) 55%, transparent 100%); display: flex; flex-direction: column; align-items: center; text-align: center; transform: translateY(8px); transition: transform 0.35s ease; }
-  .artist-card:hover .artist-overlay { transform: translateY(0); }
-  .artist-name-tag { font-family: 'Unbounded', sans-serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.05em; margin-bottom: 6px; }
-  .artist-role-tag { font-family: 'Space Mono', monospace; font-size: 0.62rem; color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 10px; }
-  .artist-role-tag::after { content: ''; display: block; width: 28px; height: 1px; background: var(--gold); margin: 10px auto 0; opacity: 0.6; }
-  .artist-bio-tag { font-size: 0.95rem; color: var(--gray-light); font-style: italic; margin-bottom: 16px; display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.55; opacity: 0; transition: opacity 0.3s ease 0.05s; }
-  .artist-card:hover .artist-bio-tag { opacity: 1; }
-  .portfolio-btn { font-family: 'Space Mono', monospace; font-size: 0.62rem; letter-spacing: 0.14em; text-transform: uppercase; border: 1px solid var(--gold); color: var(--gold); background: none; padding: 8px 18px; cursor: pointer; opacity: 0; transition: opacity 0.3s ease 0.1s, background 0.2s, color 0.2s; }
-  .artist-card:hover .portfolio-btn { opacity: 1; }
-  .portfolio-btn:hover { background: var(--gold); color: var(--black); }
-
-  /* LIGHTBOX */
-  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.96); z-index: 2000; flex-direction: column; }
-  .lightbox.open { display: flex; }
-  .lb-header { display: flex; align-items: center; justify-content: space-between; padding: 22px 36px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-  .lb-artist-name { font-family: 'Unbounded', sans-serif; font-size: 0.9rem; letter-spacing: 0.08em; }
-  .lb-artist-role { font-family: 'Space Mono', monospace; font-size: 0.65rem; color: var(--gold); letter-spacing: 0.14em; margin-top: 3px; }
-  .lb-close { width: 44px; height: 44px; border: 1px solid var(--border); background: none; color: var(--white); cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-  .lb-close:hover { border-color: var(--gold); color: var(--gold); }
-  .lb-body { flex: 1; overflow-y: auto; padding: 36px; }
-  .lb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-width: 960px; margin: 0 auto; }
-  .lb-grid-img { aspect-ratio: 1; overflow: hidden; cursor: zoom-in; }
-  .lb-grid-img img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%); transition: filter 0.25s, transform 0.3s; }
-  .lb-grid-img:hover img { filter: grayscale(0%); transform: scale(1.04); }
-  .lb-zoom { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 3000; align-items: center; justify-content: center; }
-  .lb-zoom.open { display: flex; }
-  .lb-zoom img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
-  .lb-zoom-close { position: absolute; top: 22px; right: 28px; background: none; border: 1px solid var(--border); color: var(--white); width: 46px; height: 46px; cursor: pointer; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-  .lb-zoom-close:hover { border-color: var(--gold); color: var(--gold); }
-  .lb-zoom-prev, .lb-zoom-next { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: 1px solid var(--border); color: var(--white); width: 50px; height: 50px; cursor: pointer; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
-  .lb-zoom-prev { left: 28px; }
-  .lb-zoom-next { right: 28px; }
-  .lb-zoom-prev:hover, .lb-zoom-next:hover { border-color: var(--gold); color: var(--gold); }
-  .no-artists { grid-column: 1/-1; text-align: center; padding: 100px 24px; color: var(--gray); font-style: italic; }
-
-  /* BOOKING SECTION */
-  .booking-section { padding: 80px 0 100px; background: var(--dark); border-top: 1px solid var(--border); }
-  .booking-section-inner { display: grid; grid-template-columns: 1.3fr 0.7fr; gap: 80px; align-items: start; }
-  .booking-success { display: none; background: rgba(39,174,96,0.08); border: 1px solid var(--green); padding: 40px; text-align: center; margin-top: 24px; }
-  .booking-success.visible { display: block; }
-  .booking-success h3 { font-family: 'Unbounded', sans-serif; font-size: 0.9rem; letter-spacing: 0.08em; color: var(--green); margin-bottom: 12px; }
-  .booking-success p { color: var(--gray-light); font-style: italic; font-size: 1.05rem; }
-  .form-input.invalid { border-color: var(--red) !important; }
-  .form-input.valid { border-color: rgba(39,174,96,0.5) !important; }
-
-  @media (max-width: 1024px) { .artists-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 900px) { .booking-section-inner { grid-template-columns: 1fr; gap: 48px; } }
-  @media (max-width: 700px) { .artists-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } .lb-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 420px) { .artists-grid { grid-template-columns: 1fr; } }
+    .booking-success { display:none;background:rgba(39,174,96,0.08);border:1px solid var(--green);padding:40px;text-align:center;margin-top:24px; }
+    .booking-success.visible { display:block; }
+    .booking-success h3 { font-family:'Unbounded',sans-serif;font-size:0.9rem;letter-spacing:0.08em;color:var(--green);margin-bottom:12px; }
+    .booking-success p { color:var(--gray-light);font-size:1.05rem; }
+    .form-input.invalid { border-color:var(--red)!important; }
+    .form-input.valid { border-color:rgba(39,174,96,0.5)!important; }
   </style>
 </head>
 <body>
 
 <nav id="navbar">
-  <a href="index.html" class="nav-logo">
-    <img src="nr40-logo.png" alt="NR40 Urban Arts" class="nav-logo-img">
-  </a>
+  <a href="index.html" class="nav-logo"><img src="nr40-logo.png" alt="NR40 Urban Arts" class="nav-logo-img"></a>
   <ul class="nav-links">
     <li><a href="nr40.html" data-gr="NR40" data-en="NR40">NR40</a></li>
     <li><a href="team.html" data-gr="Tattoo" data-en="Tattoo">Tattoo</a></li>
@@ -79,9 +25,7 @@
     <li><a href="nr40.html#events" data-gr="Events" data-en="Events">Events</a></li>
     <li><a href="contact.html" data-gr="Επικοινωνία" data-en="Contact">Επικοινωνία</a></li>
   </ul>
-  <div class="nav-right">
-    <button class="lang-btn" id="langBtn">EN</button>
-  </div>
+  <div class="nav-right"><button class="lang-btn" id="langBtn">EN</button></div>
   <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
@@ -93,146 +37,108 @@
   <button class="mobile-lang" id="mobileLangBtn">EN</button>
 </div>
 
-<header class="page-header" data-title="ARTISTS">
+<header class="page-header" data-title="BOOKING">
   <div class="container">
-    <span class="label" data-gr="Η ομάδα μας" data-en="Our Team">Η ομάδα μας</span>
-    <h1 class="heading" style="font-size:clamp(2.2rem,5vw,4rem);margin-bottom:20px;" data-gr="Γνώρισε τους <em>καλλιτέχνες</em>" data-en="Meet the <em>artists</em>">Γνώρισε τους <em>καλλιτέχνες</em></h1>
+    <span class="label" data-gr="Κράτηση Τατουάζ" data-en="Book a Tattoo">Κράτηση Τατουάζ</span>
+    <h1 class="heading" style="font-size:clamp(2.2rem,5vw,4rem);margin-bottom:20px;" data-gr="Κλείσε Ραντεβού" data-en="Book Now">Κλείσε <em>Ραντεβού</em></h1>
     <div class="gold-rule"></div>
-    <p style="color:var(--gray-light);font-style:italic;max-width:520px;" data-gr="Κάθε καλλιτέχνης φέρνει το δικό του μοναδικό στυλ. Εξερεύνησε τα portfolio τους και βρες ποιος ταιριάζει με τη δική σου ιδέα." data-en="Each artist brings their own unique style. Explore their portfolios and find who matches your idea.">Κάθε καλλιτέχνης φέρνει το δικό του μοναδικό στυλ. Εξερεύνησε τα portfolio τους και βρες ποιος ταιριάζει με τη δική σου ιδέα.</p>
+    <p style="color:var(--gray-light);max-width:480px;" data-gr="Συμπλήρωσε τη φόρμα και θα επικοινωνήσουμε εντός 24 ωρών." data-en="Fill in the form and we will contact you within 24 hours.">Συμπλήρωσε τη φόρμα και θα επικοινωνήσουμε εντός 24 ωρών.</p>
   </div>
 </header>
 
-<section class="artists-section">
-  <div class="container">
-    <div class="artists-grid" id="artistsGrid">
-      <div class="no-artists"><div class="spinner"></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox">
-  <div class="lb-header">
-    <div><div class="lb-artist-name" id="lbName"></div><div class="lb-artist-role" id="lbRole"></div></div>
-    <button class="lb-close" onclick="closeLightbox()">&#x2715;</button>
-  </div>
-  <div class="lb-body"><div class="lb-grid" id="lbGrid"></div></div>
-</div>
-<div class="lb-zoom" id="lbZoom">
-  <button class="lb-zoom-close" onclick="closeZoom()">&#x2715;</button>
-  <button class="lb-zoom-prev" onclick="zoomNav(-1)">&#8592;</button>
-  <img id="lbZoomImg" src="" alt="">
-  <button class="lb-zoom-next" onclick="zoomNav(1)">&#8594;</button>
-</div>
-
-<!-- BOOKING SECTION -->
-<section class="booking-section" id="book">
-  <div class="container">
-    <div style="text-align:center;margin-bottom:56px;">
-      <span class="label" data-gr="Κράτηση Τατουάζ" data-en="Book a Tattoo">Κράτηση Τατουάζ</span>
-      <h2 class="heading" style="font-size:clamp(1.8rem,3.5vw,2.8rem);" data-gr="Κλείσε <em>Ραντεβού</em>" data-en="Book <em>Now</em>">Κλείσε <em>Ραντεβού</em></h2>
-      <div class="gold-rule" style="margin:20px auto;"></div>
-      <p style="color:var(--gray-light);font-style:italic;max-width:480px;margin:0 auto;" data-gr="Συμπλήρωσε τη φόρμα και θα επικοινωνήσουμε εντός 24 ωρών." data-en="Fill in the form and we will contact you within 24 hours.">Συμπλήρωσε τη φόρμα και θα επικοινωνήσουμε εντός 24 ωρών.</p>
-    </div>
-    <div class="booking-section-inner">
-      <div class="form-wrap">
-        <form id="bookingForm" novalidate>
-          <div class="form-grid-2">
-            <div class="form-group">
-              <label class="form-label" for="fullName" data-gr="Ονοματεπώνυμο *" data-en="Full Name *">Ονοματεπώνυμο *</label>
-              <input class="form-input" type="text" id="fullName" name="fullName" required data-ph-gr="π.χ. Νίκος Παπαδόπουλος" data-ph-en="e.g. Nikos Papadopoulos" placeholder="π.χ. Νίκος Παπαδόπουλος">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="phone" data-gr="Τηλέφωνο *" data-en="Phone *">Τηλέφωνο *</label>
-              <input class="form-input" type="tel" id="phone" name="phone" required inputmode="tel" autocomplete="tel" data-ph-gr="π.χ. 6912345678" data-ph-en="e.g. +30 6912345678" placeholder="π.χ. 6912345678">
-            </div>
+<div class="container">
+  <div class="split-layout">
+    <div class="form-wrap">
+      <form id="bookingForm" novalidate>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="fullName" data-gr="Ονοματεπώνυμο *" data-en="Full Name *">Ονοματεπώνυμο *</label>
+            <input class="form-input" type="text" id="fullName" required data-ph-gr="π.χ. Νίκος Παπαδόπουλος" data-ph-en="e.g. Nikos Papadopoulos" placeholder="π.χ. Νίκος Παπαδόπουλος">
           </div>
           <div class="form-group">
-            <label class="form-label" for="email" data-gr="Email *" data-en="Email *">Email *</label>
-            <input class="form-input" type="email" id="email" name="email" required placeholder="your@email.com" inputmode="email" autocomplete="email">
+            <label class="form-label" for="phone" data-gr="Τηλέφωνο *" data-en="Phone *">Τηλέφωνο *</label>
+            <input class="form-input" type="tel" id="phone" required inputmode="tel" autocomplete="tel" data-ph-gr="π.χ. 6912345678" data-ph-en="e.g. +30 6912345678" placeholder="π.χ. 6912345678">
           </div>
-          <div class="form-grid-2">
-            <div class="form-group">
-              <label class="form-label" for="service" data-gr="Υπηρεσία *" data-en="Service *">Υπηρεσία *</label>
-              <select class="form-select" id="service" name="service" required>
-                <option value="" disabled selected data-gr="Επέλεξε υπηρεσία" data-en="Select service">Επέλεξε υπηρεσία</option>
-                <option data-gr="Νέο Τατουάζ" data-en="New Tattoo">Νέο Τατουάζ</option>
-                <option data-gr="Cover-Up" data-en="Cover-Up">Cover-Up</option>
-                <option data-gr="Touch-Up / Retouching" data-en="Touch-Up / Retouching">Touch-Up / Retouching</option>
-                <option data-gr="Fine Line" data-en="Fine Line">Fine Line</option>
-                <option data-gr="Traditional" data-en="Traditional">Traditional</option>
-                <option data-gr="Realism" data-en="Realism">Realism</option>
-                <option data-gr="Neo-Traditional" data-en="Neo-Traditional">Neo-Traditional</option>
-                <option data-gr="Geometric / Mandala" data-en="Geometric / Mandala">Geometric / Mandala</option>
-                <option data-gr="Watercolor" data-en="Watercolor">Watercolor</option>
-                <option data-gr="Blackwork" data-en="Blackwork">Blackwork</option>
-                <option data-gr="Japanese / Irezumi" data-en="Japanese / Irezumi">Japanese / Irezumi</option>
-                <option data-gr="Portrait" data-en="Portrait">Portrait</option>
-                <option data-gr="Sleeve" data-en="Sleeve">Sleeve</option>
-                <option data-gr="Lettering / Calligraphy" data-en="Lettering / Calligraphy">Lettering / Calligraphy</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="artist" data-gr="Καλλιτέχνης *" data-en="Artist *">Καλλιτέχνης *</label>
-              <select class="form-select" id="artist" name="artist" required>
-                <option value="" disabled selected data-gr="Επέλεξε καλλιτέχνη" data-en="Select artist">Επέλεξε καλλιτέχνη</option>
-                <option value="Quipster">Quipster</option>
-                <option value="Valia">Valia</option>
-                <option value="Storm">Storm</option>
-                <option value="Alex">Alex</option>
-                <option value="Jimmy">Jimmy</option>
-                <option value="Konstantinos">Konstantinos</option>
-                <option value="Lacrimost">Lacrimost</option>
-                <option data-gr="Όποιον θέλετε" data-en="Any available">Όποιον θέλετε</option>
-              </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" data-gr="Φωτογραφίες / Σχέδια" data-en="Photos / Designs">Φωτογραφίες / Σχέδια <span style="color:var(--gray);font-size:0.85em;" data-gr="(έως 5 · JPG, PNG, PDF)" data-en="(max 5 · JPG, PNG, PDF)">(έως 5 · JPG, PNG, PDF)</span></label>
-            <div class="file-upload" onclick="document.getElementById('fileInput').click()">
-              <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.pdf" multiple>
-              <span class="file-upload-icon">⊕</span>
-              <span class="file-upload-text" data-gr="Κλικ για επιλογή αρχείων" data-en="Click to select files">Κλικ για επιλογή αρχείων</span>
-            </div>
-            <div class="file-list" id="fileList"></div>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="message" data-gr="Μήνυμα" data-en="Message">Μήνυμα</label>
-            <textarea class="form-textarea" id="message" name="message" data-ph-gr="Περιέγραψε την ιδέα σου, μέγεθος, τοποθεσία στο σώμα κ.λπ." data-ph-en="Describe your idea, size, body placement, etc." placeholder="Περιέγραψε την ιδέα σου..."></textarea>
-          </div>
-          <button type="submit" class="submit-btn" id="submitBtn">
-            <span class="btn-text" data-gr="Αποστολή Αίτησης" data-en="Submit Request">Αποστολή Αίτησης</span>
-            <span class="btn-spinner"></span>
-          </button>
-          <div class="alert" id="formAlert"></div>
-        </form>
-        <div class="booking-success" id="bookingSuccess">
-          <h3 data-gr="✓ Η αίτησή σου στάλθηκε!" data-en="✓ Request Submitted!">✓ Η αίτησή σου στάλθηκε!</h3>
-          <p data-gr="Θα επικοινωνήσουμε μαζί σου εντός 24 ωρών για επιβεβαίωση." data-en="We will contact you within 24 hours to confirm your appointment.">Θα επικοινωνήσουμε μαζί σου εντός 24 ωρών για επιβεβαίωση.</p>
         </div>
+        <div class="form-group">
+          <label class="form-label" for="email" data-gr="Email *" data-en="Email *">Email *</label>
+          <input class="form-input" type="email" id="email" required placeholder="your@email.com" inputmode="email" autocomplete="email">
+        </div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="service" data-gr="Στυλ *" data-en="Style *">Στυλ *</label>
+            <select class="form-select" id="service" required onchange="updateArtistsByStyle()">
+              <option value="" disabled selected data-gr="Επέλεξε στυλ" data-en="Select style">Επέλεξε στυλ</option>
+              <option value="Traditional">Traditional</option>
+              <option value="Realism">Realism</option>
+              <option value="Neo-Traditional">Neo-Traditional</option>
+              <option value="Geometric / Mandala">Geometric / Mandala</option>
+              <option value="Watercolor">Watercolor</option>
+              <option value="Blackwork">Blackwork</option>
+              <option value="Lettering / Calligraphy">Lettering / Calligraphy</option>
+              <option value="Fine Line">Fine Line</option>
+              <option value="Japanese / Irezumi">Japanese / Irezumi</option>
+              <option value="Portrait">Portrait</option>
+              <option value="Cover-Up">Cover-Up</option>
+              <option value="Touch-Up" data-gr="Touch-Up / Retouching" data-en="Touch-Up / Retouching">Touch-Up / Retouching</option>
+              <option value="Sleeve">Sleeve</option>
+              <option value="Other" data-gr="Άλλο" data-en="Other">Άλλο</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="artist" data-gr="Καλλιτέχνης *" data-en="Artist *">Καλλιτέχνης *</label>
+            <select class="form-select" id="artist" required>
+              <option value="" disabled selected data-gr="Επέλεξε πρώτα στυλ" data-en="Select style first">Επέλεξε πρώτα στυλ</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-gr="Φωτογραφίες / Σχέδια" data-en="Photos / Designs">
+            Φωτογραφίες / Σχέδια <span style="color:var(--gray);font-size:0.85em;">(έως 5 · JPG, PNG, PDF)</span>
+          </label>
+          <div class="file-upload" onclick="document.getElementById('fileInput').click()">
+            <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.pdf" multiple>
+            <span class="file-upload-icon">⊕</span>
+            <span class="file-upload-text" data-gr="Κλικ για επιλογή αρχείων" data-en="Click to select files">Κλικ για επιλογή αρχείων</span>
+          </div>
+          <div class="file-list" id="fileList"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="message" data-gr="Μήνυμα" data-en="Message">Μήνυμα</label>
+          <textarea class="form-textarea" id="message" data-ph-gr="Περιέγραψε την ιδέα σου, μέγεθος, τοποθεσία κ.λπ." data-ph-en="Describe your idea, size, body placement, etc." placeholder="Περιέγραψε την ιδέα σου..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <span class="btn-text" data-gr="Αποστολή Αίτησης" data-en="Submit Request">Αποστολή Αίτησης</span>
+          <span class="btn-spinner"></span>
+        </button>
+        <div class="alert" id="formAlert"></div>
+      </form>
+      <div class="booking-success" id="bookingSuccess">
+        <h3 data-gr="✓ Η αίτησή σου στάλθηκε!" data-en="✓ Request Submitted!">✓ Η αίτησή σου στάλθηκε!</h3>
+        <p data-gr="Θα επικοινωνήσουμε μαζί σου εντός 24 ωρών." data-en="We will contact you within 24 hours.">Θα επικοινωνήσουμε μαζί σου εντός 24 ωρών.</p>
       </div>
-      <div class="sidebar">
-        <div class="info-card">
-          <div class="info-card-title" data-gr="Ωράριο Λειτουργίας" data-en="Opening Hours">Ωράριο Λειτουργίας</div>
-          <div class="info-row"><span class="info-icon">◷</span><span data-gr="Δευτέρα – Σάββατο: 11:00–21:00" data-en="Monday – Saturday: 11:00–21:00">Δευτέρα – Σάββατο: 11:00–21:00</span></div>
-          <div class="info-row"><span class="info-icon">◷</span><span data-gr="Κυριακή: Κλειστά" data-en="Sunday: Closed">Κυριακή: Κλειστά</span></div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title" data-gr="Σημαντικές Πληροφορίες" data-en="Important Info">Σημαντικές Πληροφορίες</div>
-          <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Ελάχιστη ηλικία: 18 ετών" data-en="Minimum age: 18 years">Ελάχιστη ηλικία: 18 ετών</span></div>
-          <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Φέρε έγκυρη ταυτότητα" data-en="Bring valid ID">Φέρε έγκυρη ταυτότητα</span></div>
-          <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Απάντηση εντός 24 ωρών" data-en="Response within 24 hours">Απάντηση εντός 24 ωρών</span></div>
-          <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Ελάχιστο 50€" data-en="Minimum €50">Ελάχιστο 50€</span></div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title" data-gr="Piercing;" data-en="Piercing?">Piercing;</div>
-          <div class="info-row" style="margin-bottom:16px;"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Για piercing χρησιμοποίησε τη φόρμα piercing" data-en="For piercing use the dedicated piercing form">Για piercing χρησιμοποίησε τη φόρμα piercing</span></div>
-          <a href="piercing.html" class="btn btn-ghost btn-sm btn-full" data-gr="Κράτηση Piercing →" data-en="Book Piercing →">Κράτηση Piercing →</a>
-        </div>
+    </div>
+
+    <div class="sidebar">
+      <div class="info-card">
+        <div class="info-card-title" data-gr="Ωράριο Tattoo" data-en="Tattoo Hours">Ωράριο Tattoo</div>
+        <div class="info-row"><span class="info-icon">◷</span><span data-gr="Δευτέρα – Σάββατο: 12:00–21:00" data-en="Monday – Saturday: 12:00–21:00">Δευτέρα – Σάββατο: 12:00–21:00</span></div>
+        <div class="info-row"><span class="info-icon">◷</span><span data-gr="Κυριακή: Κλειστά" data-en="Sunday: Closed">Κυριακή: Κλειστά</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title" data-gr="Σημαντικές Πληροφορίες" data-en="Important Info">Σημαντικές Πληροφορίες</div>
+        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Ελάχιστη ηλικία: 18 ετών" data-en="Minimum age: 18 years">Ελάχιστη ηλικία: 18 ετών</span></div>
+        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Απάντηση εντός 24 ωρών" data-en="Response within 24 hours">Απάντηση εντός 24 ωρών</span></div>
+        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Τιμές: επικοινωνήστε μαζί μας" data-en="Pricing: contact us">Τιμές: επικοινωνήστε μαζί μας</span></div>
+      </div>
+      <div class="info-card">
+        <div class="info-card-title" data-gr="Piercing;" data-en="Piercing?">Piercing;</div>
+        <div class="info-row" style="margin-bottom:16px;"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Για piercing χρησιμοποίησε τη φόρμα piercing" data-en="For piercing use the piercing form">Για piercing χρησιμοποίησε τη φόρμα piercing</span></div>
+        <a href="piercing.html" class="btn btn-ghost btn-sm btn-full" data-gr="Κράτηση Piercing →" data-en="Book Piercing →">Κράτηση Piercing →</a>
       </div>
     </div>
   </div>
-</section>
+</div>
 
 <footer>
   <div class="container">
@@ -240,14 +146,7 @@
       <div>
         <div class="footer-logo-row">
           <a href="index.html" class="footer-logo-link"><img src="nr40-logo.png" alt="NR40 Urban Arts" class="footer-logo-img"></a>
-          <p class="footer-desc" data-gr="Τέχνη που μένει για πάντα." data-en="Art that lasts forever.">Τέχνη που μένει για πάντα.</p>
-        </div>
-        <div class="footer-social">
-          <div class="footer-col-title" style="margin-bottom:12px;" data-gr="Ακολούθησέ μας" data-en="Follow Us">Ακολούθησέ μας</div>
-          <div style="display:flex;flex-direction:column;gap:8px;">
-            <a href="https://www.instagram.com/nr40urban_ath/" target="_blank" rel="noopener" class="footer-ig-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg><span>@nr40urban_ath</span></a>
-            <a href="https://www.instagram.com/nr40_ath/" target="_blank" rel="noopener" class="footer-ig-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg><span>@nr40_ath</span></a>
-          </div>
+          <p class="footer-desc">Urban Arts</p>
         </div>
       </div>
       <div>
@@ -269,7 +168,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 NR40. <span data-gr="Όλα τα δικαιώματα διατηρούνται." data-en="All rights reserved.">Όλα τα δικαιώματα διατηρούνται.</span></span>
+      <span>© 2026 NR40.</span>
       <span>Κανιγγός 27, Αθήνα 106 82</span>
     </div>
   </div>
@@ -278,77 +177,30 @@
 
 <script src="js/main.js"></script>
 <script>
-  let currentPhotos = [];
-  let zoomIdx = 0;
+  const styleArtistMap = {
+    'Traditional':          ['Quipster'],
+    'Realism':              ['Alex', 'Shoutone', 'Lacrimosa'],
+    'Neo-Traditional':      ['Quipster', 'Alex'],
+    'Geometric / Mandala':  ['Valia', 'Shoutone'],
+    'Watercolor':           ['Alex', 'Quipster', 'Alice'],
+    'Blackwork':            ['Shoutone', 'Chaos', 'Valia'],
+    'Lettering / Calligraphy': ['Shoutone', 'Alex'],
+  };
+  const ALL_ARTISTS = ['Quipster', 'Valia', 'Alex', 'Shoutone', 'Lacrimosa', 'Chaos', 'Alice', 'Konstantinos'];
 
-  async function loadArtists() {
-    const grid = document.getElementById('artistsGrid');
-    try {
-      const artists = await apiGet('/api/artists');
-      if (!artists.length) { grid.innerHTML = '<div class="no-artists" data-gr="Δεν υπάρχουν καλλιτέχνες ακόμα." data-en="No artists yet.">Δεν υπάρχουν καλλιτέχνες ακόμα.</div>'; applyLang(); return; }
-      grid.innerHTML = '';
-      const urlParams = new URLSearchParams(window.location.search);
-      const targetArtist = urlParams.get('artist');
-      let galleryPhotos = [];
-      try { galleryPhotos = await apiGet('/api/gallery?type=tattoo'); } catch(_) {}
-      artists.forEach(function(a) {
-        const card = document.createElement('div');
-        card.className = 'artist-card';
-        card.dataset.artistId = a._id;
-        card.dataset.artistName = a.name;
-        const linkedGallery = galleryPhotos.filter(p => (p.artistId && p.artistId === a._id) || (p.artistName && p.artistName.toLowerCase() === a.name.toLowerCase())).map(p => ({ url: p.url, caption: p.caption || '' }));
-        const ownPhotos = a.photos || [];
-        const allPhotos = ownPhotos.slice();
-        linkedGallery.forEach(gp => { if (!allPhotos.some(op => op.url === gp.url)) allPhotos.push(gp); });
-        const coverUrl = (a.profilePhoto && a.profilePhoto.url) || (ownPhotos[0] && ownPhotos[0].url) || (linkedGallery[0] && linkedGallery[0].url) || 'https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=600&q=80';
-        const roleTxt = (a.role && (a.role[lang] || a.role.gr)) || '';
-        const bioTxt  = (a.bio  && (a.bio[lang]  || a.bio.gr))  || '';
-        let portfolioBtn = '';
-        if (allPhotos.length) {
-          const artistJson = encodeURIComponent(JSON.stringify({ name: a.name, role: a.role, photos: allPhotos }));
-          portfolioBtn = '<button class="portfolio-btn" onclick="openLightbox(event,this)" data-artist="' + artistJson + '" data-gr="Δες τη δουλειά του/της" data-en="View Portfolio">Δες τη δουλειά του/της</button>';
-        }
-        card.innerHTML = '<div class="artist-photo"><img src="' + coverUrl + '" alt="' + a.name + '" loading="lazy"></div><div class="artist-overlay"><div class="artist-name-tag">' + a.name + '</div><div class="artist-role-tag">' + roleTxt + '</div><div class="artist-bio-tag">' + bioTxt + '</div>' + portfolioBtn + '</div>';
-        card.addEventListener('click', function() { window.location.href = 'artist.html?id=' + a._id; });
-        grid.appendChild(card);
-      });
-      applyLang();
-      if (targetArtist) {
-        setTimeout(function() {
-          const match = grid.querySelector('[data-artist-id="' + targetArtist + '"],[data-artist-name="' + targetArtist + '"]');
-          if (match) { match.classList.add('highlighted'); match.scrollIntoView({ behavior:'smooth', block:'center' }); setTimeout(() => match.classList.remove('highlighted'), 3000); }
-        }, 400);
-      }
-    } catch(err) { grid.innerHTML = '<div class="no-artists" style="color:var(--red);">' + err.message + '</div>'; }
-  }
-
-  function openLightbox(e, btn) {
-    e.stopPropagation();
-    const data = JSON.parse(decodeURIComponent(btn.dataset.artist));
-    document.getElementById('lbName').textContent = data.name;
-    document.getElementById('lbRole').textContent = (data.role && (data.role[lang] || data.role.gr)) || '';
-    currentPhotos = data.photos;
-    const lbGrid = document.getElementById('lbGrid');
-    lbGrid.innerHTML = '';
-    data.photos.forEach(function(p, i) {
-      const wrap = document.createElement('div'); wrap.className = 'lb-grid-img';
-      wrap.innerHTML = '<img src="' + p.url + '" alt="' + data.name + '" loading="lazy">';
-      wrap.addEventListener('click', function() { openZoom(i); });
-      lbGrid.appendChild(wrap);
+  function updateArtistsByStyle() {
+    const service = document.getElementById('service').value;
+    const artistSelect = document.getElementById('artist');
+    const lang = localStorage.getItem('lang') || 'gr';
+    const available = styleArtistMap[service] || ALL_ARTISTS;
+    const placeholder = lang === 'en' ? 'Select artist' : 'Επέλεξε καλλιτέχνη';
+    artistSelect.innerHTML = '<option value="" disabled selected>' + placeholder + '</option>';
+    available.forEach(name => {
+      const opt = document.createElement('option'); opt.value = name; opt.textContent = name; artistSelect.appendChild(opt);
     });
-    document.getElementById('lightbox').classList.add('open');
-    document.body.style.overflow = 'hidden';
+    const anyOpt = document.createElement('option'); anyOpt.value = 'Any'; anyOpt.textContent = lang === 'en' ? 'Any available' : 'Όποιον θέλετε'; artistSelect.appendChild(anyOpt);
   }
-  function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); document.body.style.overflow = ''; }
-  function openZoom(idx) { zoomIdx = idx; renderZoom(); document.getElementById('lbZoom').classList.add('open'); }
-  function closeZoom() { document.getElementById('lbZoom').classList.remove('open'); }
-  function renderZoom() { document.getElementById('lbZoomImg').src = currentPhotos[zoomIdx].url; }
-  function zoomNav(dir) { zoomIdx = (zoomIdx + dir + currentPhotos.length) % currentPhotos.length; renderZoom(); }
-  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeZoom(); closeLightbox(); } if (e.key === 'ArrowLeft') zoomNav(-1); if (e.key === 'ArrowRight') zoomNav(1); });
-  document.getElementById('lightbox').addEventListener('click', function(e) { if (e.target === this) closeLightbox(); });
-  function onLangChange() { loadArtists(); }
 
-  // BOOKING FORM
   let selectedFiles = [];
   const phoneInput = document.getElementById('phone');
   phoneInput.addEventListener('input', function() {
@@ -359,16 +211,22 @@
   const isValidEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
   emailInput.addEventListener('blur', function() { if (!this.value) return; this.classList.toggle('invalid', !isValidEmail(this.value)); this.classList.toggle('valid', isValidEmail(this.value)); });
   emailInput.addEventListener('input', function() { this.classList.remove('invalid'); this.classList.toggle('valid', isValidEmail(this.value)); });
-  document.getElementById('fileInput').addEventListener('change', function() { Array.from(this.files).forEach(f => { if (selectedFiles.length < 5) selectedFiles.push(f); }); renderFiles(); this.value = ''; });
-  function renderFiles() { const list = document.getElementById('fileList'); list.innerHTML = ''; selectedFiles.forEach((f,i) => { const c = document.createElement('div'); c.className = 'file-chip'; c.innerHTML = '<span>' + f.name + ' <span style="color:var(--gray);font-size:0.8em;">(' + (f.size/1024).toFixed(0) + 'kb)</span></span><button type="button" onclick="removeFile(' + i + ')">✕</button>'; list.appendChild(c); }); }
+  document.getElementById('fileInput').addEventListener('change', function() {
+    Array.from(this.files).forEach(f => { if (selectedFiles.length < 5) selectedFiles.push(f); }); renderFiles(); this.value = '';
+  });
+  function renderFiles() {
+    const list = document.getElementById('fileList'); list.innerHTML = '';
+    selectedFiles.forEach((f,i) => { const c = document.createElement('div'); c.className = 'file-chip'; c.innerHTML = '<span>' + f.name + ' <span style="color:var(--gray);font-size:0.8em;">(' + (f.size/1024).toFixed(0) + 'kb)</span></span><button type="button" onclick="removeFile(' + i + ')">✕</button>'; list.appendChild(c); });
+  }
   function removeFile(i) { selectedFiles.splice(i,1); renderFiles(); }
+
   document.getElementById('bookingForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const phoneDigits = phoneInput.value.replace('+','');
     if (phoneDigits.length < 7) { phoneInput.classList.add('invalid'); return showAlert('formAlert','error','✕ Εισάγετε έγκυρο αριθμό τηλεφώνου.','✕ Please enter a valid phone number.'); }
     if (!isValidEmail(emailInput.value.trim())) { emailInput.classList.add('invalid'); return showAlert('formAlert','error','✕ Εισάγετε έγκυρη διεύθυνση email.','✕ Please enter a valid email address.'); }
-    const btn = document.getElementById('submitBtn');
-    btn.classList.add('loading'); btn.disabled = true;
+    if (!document.getElementById('artist').value) { return showAlert('formAlert','error','✕ Επέλεξε καλλιτέχνη.','✕ Please select an artist.'); }
+    const btn = document.getElementById('submitBtn'); btn.classList.add('loading'); btn.disabled = true;
     try {
       const fd = new FormData();
       fd.append('fullName', document.getElementById('fullName').value.trim());
@@ -388,15 +246,6 @@
       btn.classList.remove('loading'); btn.disabled = false;
     }
   });
-
-  loadArtists();
-
-  // Scroll to booking if URL has #book
-  if (window.location.hash === '#book') {
-    setTimeout(() => { document.getElementById('book').scrollIntoView({ behavior:'smooth' }); }, 500);
-  }
 </script>
-<script>window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };</script>
-<script defer src="/_vercel/speed-insights/script.js"></script>
 </body>
 </html>

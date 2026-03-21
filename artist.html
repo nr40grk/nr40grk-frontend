@@ -7,137 +7,40 @@
   <link rel="stylesheet" href="css/style.css">
   <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
   <script defer src="/_vercel/insights/script.js"></script>
-
   <style>
-    .artist-hero {
-      display: grid;
-      grid-template-columns: 420px 1fr;
-      gap: 60px;
-      padding: 80px 0;
-      align-items: start;
-    }
-    .artist-hero-img {
-      width: 100%;
-      aspect-ratio: 3/4;
-      object-fit: cover;
-      filter: grayscale(40%);
-    }
-    .artist-hero-placeholder {
-      width: 100%;
-      aspect-ratio: 3/4;
-      background: var(--card);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 4rem;
-    }
+    .artist-hero { display: grid; grid-template-columns: 420px 1fr; gap: 60px; padding: 80px 0; align-items: start; }
+    .artist-hero-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; filter: grayscale(40%); }
+    .artist-hero-placeholder { width: 100%; aspect-ratio: 3/4; background: var(--card); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 4rem; }
     .artist-hero-info { padding-top: 12px; }
-    .artist-hero-name {
-      font-family: 'Unbounded', sans-serif;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 12px;
-    }
-    .artist-hero-role {
-      font-family: 'Space Mono', monospace;
-      font-size: 0.7rem;
-      color: var(--gold);
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      margin-bottom: 28px;
-    }
+    .artist-hero-name { font-family: 'Unbounded', sans-serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; line-height: 1.1; margin-bottom: 12px; }
+    .artist-hero-role { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 28px; }
     .gold-rule { width: 48px; height: 2px; background: var(--gold); margin-bottom: 28px; }
-    .artist-hero-bio {
-      font-size: 1.05rem;
-      color: var(--gray-light);
-      font-style: italic;
-      line-height: 1.75;
-      margin-bottom: 36px;
-    }
+    .artist-hero-bio { font-size: 1.05rem; color: var(--gray-light); font-style: italic; line-height: 1.75; margin-bottom: 36px; }
     .portfolio-section { padding: 0 0 100px; }
-    .portfolio-section-title {
-      font-family: 'Unbounded', sans-serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-    }
-    .portfolio-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-    }
-    .portfolio-item {
-      aspect-ratio: 1;
-      overflow: hidden;
-      cursor: zoom-in;
-      background: var(--card);
-    }
-    .portfolio-item img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      filter: grayscale(30%);
-      transition: transform 0.4s, filter 0.3s;
-    }
+    .portfolio-section-title { font-family: 'Unbounded', sans-serif; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .portfolio-item { aspect-ratio: 1; overflow: hidden; cursor: zoom-in; background: var(--card); }
+    .portfolio-item img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%); transition: transform 0.4s, filter 0.3s; }
     .portfolio-item:hover img { transform: scale(1.06); filter: grayscale(0%); }
-    .no-photos {
-      grid-column: 1/-1;
-      text-align: center;
-      padding: 60px;
-      color: var(--gray);
-      font-style: italic;
-    }
-    .zoom-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.97);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-    }
+    .no-photos { grid-column: 1/-1; text-align: center; padding: 60px; color: var(--gray); font-style: italic; }
+    .zoom-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.97); z-index: 2000; align-items: center; justify-content: center; }
     .zoom-overlay.open { display: flex; }
     .zoom-overlay img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
-    .zoom-close {
-      position: absolute; top: 22px; right: 28px;
-      background: none; border: 1px solid var(--border);
-      color: var(--white); width: 46px; height: 46px;
-      cursor: pointer; font-size: 1.3rem;
-      display: flex; align-items: center; justify-content: center;
-    }
+    .zoom-close { position: absolute; top: 22px; right: 28px; background: none; border: 1px solid var(--border); color: var(--white); width: 46px; height: 46px; cursor: pointer; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; }
     .zoom-close:hover { border-color: var(--gold); color: var(--gold); }
-    .zoom-prev, .zoom-next {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      background: none; border: 1px solid var(--border);
-      color: var(--white); width: 50px; height: 50px;
-      cursor: pointer; font-size: 1.3rem;
-      display: flex; align-items: center; justify-content: center;
-    }
+    .zoom-prev, .zoom-next { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: 1px solid var(--border); color: var(--white); width: 50px; height: 50px; cursor: pointer; font-size: 1.3rem; display: flex; align-items: center; justify-content: center; }
     .zoom-prev { left: 28px; }
     .zoom-next { right: 28px; }
     .zoom-prev:hover, .zoom-next:hover { border-color: var(--gold); color: var(--gold); }
     .error-state { text-align: center; padding: 120px 24px; color: var(--gray); }
-
-    @media (max-width: 900px) {
-      .artist-hero { grid-template-columns: 1fr; gap: 32px; }
-      .artist-hero-img { max-height: 480px; width: 100%; }
-    }
-    @media (max-width: 600px) {
-      .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (max-width: 900px) { .artist-hero { grid-template-columns: 1fr; gap: 32px; } .artist-hero-img { max-height: 480px; width: 100%; } }
+    @media (max-width: 600px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav id="navbar">
-  <a href="index.html" class="nav-logo">
-    <img src="nr40-logo.png" alt="NR40 Urban Arts" class="nav-logo-img">
-  </a>
+  <a href="index.html" class="nav-logo"><img src="nr40-logo.png" alt="NR40 Urban Arts" class="nav-logo-img"></a>
   <ul class="nav-links">
     <li><a href="nr40.html" data-gr="NR40" data-en="NR40">NR40</a></li>
     <li><a href="team.html" data-gr="Tattoo" data-en="Tattoo">Tattoo</a></li>
@@ -145,9 +48,7 @@
     <li><a href="nr40.html#events" data-gr="Events" data-en="Events">Events</a></li>
     <li><a href="contact.html" data-gr="Επικοινωνία" data-en="Contact">Επικοινωνία</a></li>
   </ul>
-  <div class="nav-right">
-    <button class="lang-btn" id="langBtn">EN</button>
-  </div>
+  <div class="nav-right"><button class="lang-btn" id="langBtn">EN</button></div>
   <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
@@ -159,12 +60,10 @@
   <button class="mobile-lang" id="mobileLangBtn">EN</button>
 </div>
 
-<!-- CONTENT — rendered by JS -->
 <div class="container" id="pageContent">
   <div class="error-state"><div class="spinner"></div></div>
 </div>
 
-<!-- ZOOM -->
 <div class="zoom-overlay" id="zoomOverlay">
   <button class="zoom-close" onclick="closeZoom()">✕</button>
   <button class="zoom-prev" onclick="zoomNav(-1)">&#8592;</button>
@@ -172,28 +71,19 @@
   <button class="zoom-next" onclick="zoomNav(1)">&#8594;</button>
 </div>
 
-<!-- FOOTER -->
 <footer>
   <div class="container">
     <div class="footer-grid">
       <div>
         <div class="footer-logo-row">
-          <a href="index.html" class="footer-logo-link">
-            <img src="nr40-logo.png" alt="NR40 Urban Arts" class="footer-logo-img">
-          </a>
-          <p class="footer-desc" data-gr="Τέχνη που μένει για πάντα." data-en="Art that lasts forever.">Τέχνη που μένει για πάντα.</p>
+          <a href="index.html" class="footer-logo-link"><img src="nr40-logo.png" alt="NR40 Urban Arts" class="footer-logo-img"></a>
+          <p class="footer-desc">Urban Arts</p>
         </div>
         <div class="footer-social" style="margin-top:20px;">
           <div class="footer-col-title" style="margin-bottom:12px;" data-gr="Ακολούθησέ μας" data-en="Follow Us">Ακολούθησέ μας</div>
           <div style="display:flex;flex-direction:column;gap:8px;">
-            <a href="https://www.instagram.com/nr40urban_ath/" target="_blank" rel="noopener" class="footer-ig-link">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
-              <span>@nr40urban_ath</span>
-            </a>
-            <a href="https://www.instagram.com/nr40_ath/" target="_blank" rel="noopener" class="footer-ig-link">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
-              <span>@nr40_ath</span>
-            </a>
+            <a href="https://www.instagram.com/nr40urban_ath/" target="_blank" rel="noopener" class="footer-ig-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg><span>@nr40urban_ath</span></a>
+            <a href="https://www.instagram.com/nr40_ath/" target="_blank" rel="noopener" class="footer-ig-link"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg><span>@nr40_ath</span></a>
           </div>
         </div>
       </div>
@@ -231,81 +121,48 @@
   async function loadArtist() {
     const id = new URLSearchParams(window.location.search).get('id');
     const content = document.getElementById('pageContent');
-
     if (!id) {
-      content.innerHTML = `<div class="error-state"><p style="color:var(--red);">No artist specified.</p><a href="team.html" class="btn btn-gold" style="margin-top:20px;">← Back to Artists</a></div>`;
+      content.innerHTML = '<div class="error-state"><p style="color:var(--red);">No artist specified.</p><a href="team.html" class="btn btn-gold" style="margin-top:20px;">← Back to Artists</a></div>';
       return;
     }
-
     try {
-      const a = await apiGet(`/api/artists/${id}`);
+      const a = await apiGet('/api/artists/' + id);
       photos = a.photos || [];
-      document.title = `${a.name} — NR40`;
-
+      document.title = a.name + ' — NR40';
       const coverUrl = a.profilePhoto?.url || photos[0]?.url || '';
-
-      content.innerHTML = `
-        <div class="artist-hero">
-          ${coverUrl
-            ? `<img class="artist-hero-img" src="${coverUrl}" alt="${a.name}">`
-            : `<div class="artist-hero-placeholder">📷</div>`}
-          <div class="artist-hero-info">
-            <div class="artist-hero-name">${a.name}</div>
-            <div class="artist-hero-role">${a.role[lang] || a.role.gr}</div>
-            <div class="gold-rule"></div>
-            <div class="artist-hero-bio">${a.bio[lang] || a.bio.gr}</div>
-            <a href="team.html#book" class="submit-btn" style="display:inline-block;text-decoration:none;padding:14px 32px;"
-               data-gr="Κλείσε Ραντεβού" data-en="Book Now">Κλείσε Ραντεβού</a>
-          </div>
-        </div>
-        <div class="portfolio-section">
-          <div class="portfolio-section-title" data-gr="Portfolio" data-en="Portfolio">Portfolio</div>
-          <div class="portfolio-grid" id="portfolioGrid"></div>
-        </div>
-      `;
-
+      content.innerHTML =
+        '<div class="artist-hero">' +
+        (coverUrl ? '<img class="artist-hero-img" src="' + coverUrl + '" alt="' + a.name + '">' : '<div class="artist-hero-placeholder">📷</div>') +
+        '<div class="artist-hero-info">' +
+        '<div class="artist-hero-name">' + a.name + '</div>' +
+        '<div class="artist-hero-role">' + (a.role[lang] || a.role.gr) + '</div>' +
+        '<div class="gold-rule"></div>' +
+        '<div class="artist-hero-bio">' + (a.bio[lang] || a.bio.gr) + '</div>' +
+        '<a href="team.html#book" class="submit-btn" style="display:inline-block;text-decoration:none;padding:14px 32px;" data-gr="Κλείσε Ραντεβού" data-en="Book Now">Κλείσε Ραντεβού</a>' +
+        '</div></div>' +
+        '<div class="portfolio-section"><div class="portfolio-section-title" data-gr="Portfolio" data-en="Portfolio">Portfolio</div><div class="portfolio-grid" id="portfolioGrid"></div></div>';
       const grid = document.getElementById('portfolioGrid');
       if (!photos.length) {
-        grid.innerHTML = `<div class="no-photos" data-gr="Δεν υπάρχουν φωτογραφίες ακόμα." data-en="No photos yet.">Δεν υπάρχουν φωτογραφίες ακόμα.</div>`;
+        grid.innerHTML = '<div class="no-photos" data-gr="Δεν υπάρχουν φωτογραφίες ακόμα." data-en="No photos yet.">Δεν υπάρχουν φωτογραφίες ακόμα.</div>';
       } else {
-        photos.forEach((p, i) => {
-          const item = document.createElement('div');
-          item.className = 'portfolio-item';
-          item.innerHTML = `<img src="${p.url}" alt="${a.name} work ${i+1}" loading="lazy">`;
-          item.addEventListener('click', () => openZoom(i));
+        photos.forEach(function(p, i) {
+          const item = document.createElement('div'); item.className = 'portfolio-item';
+          item.innerHTML = '<img src="' + p.url + '" alt="' + a.name + ' work ' + (i+1) + '" loading="lazy">';
+          item.addEventListener('click', function() { openZoom(i); });
           grid.appendChild(item);
         });
       }
-
       applyLang();
     } catch (err) {
-      content.innerHTML = `<div class="error-state"><p style="color:var(--red);">${err.message}</p><a href="team.html" style="color:var(--gold);margin-top:20px;display:block;">← Back to Artists</a></div>`;
+      content.innerHTML = '<div class="error-state"><p style="color:var(--red);">' + err.message + '</p><a href="team.html" style="color:var(--gold);margin-top:20px;display:block;">← Back to Artists</a></div>';
     }
   }
 
-  function openZoom(idx) {
-    zoomIdx = idx;
-    document.getElementById('zoomImg').src = photos[zoomIdx].url;
-    document.getElementById('zoomOverlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeZoom() {
-    document.getElementById('zoomOverlay').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-  function zoomNav(dir) {
-    zoomIdx = (zoomIdx + dir + photos.length) % photos.length;
-    document.getElementById('zoomImg').src = photos[zoomIdx].url;
-  }
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape')     closeZoom();
-    if (e.key === 'ArrowLeft')  zoomNav(-1);
-    if (e.key === 'ArrowRight') zoomNav(1);
-  });
-
+  function openZoom(idx) { zoomIdx = idx; document.getElementById('zoomImg').src = photos[zoomIdx].url; document.getElementById('zoomOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeZoom() { document.getElementById('zoomOverlay').classList.remove('open'); document.body.style.overflow = ''; }
+  function zoomNav(dir) { zoomIdx = (zoomIdx + dir + photos.length) % photos.length; document.getElementById('zoomImg').src = photos[zoomIdx].url; }
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeZoom(); if (e.key === 'ArrowLeft') zoomNav(-1); if (e.key === 'ArrowRight') zoomNav(1); });
   function onLangChange() { loadArtist(); }
-
   loadArtist();
 </script>
 <script>window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };</script>
