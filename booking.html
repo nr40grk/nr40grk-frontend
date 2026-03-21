@@ -245,4 +245,12 @@
       document.getElementById('bookingForm').style.display = 'none';
       document.getElementById('bookingSuccess').classList.add('visible');
       document.getElementById('bookingSuccess').scrollIntoView({ behavior:'smooth', block:'center' });
-      appl
+      applyLang();
+    } catch(err) {
+      showAlert('formAlert','error','✕ Σφάλμα. Δοκίμασε ξανά.','✕ Error. Please try again.');
+      btn.classList.remove('loading'); btn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
