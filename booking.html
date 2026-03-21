@@ -9,7 +9,7 @@
     .booking-success { display:none;background:rgba(39,174,96,0.08);border:1px solid var(--green);padding:40px;text-align:center;margin-top:24px; }
     .booking-success.visible { display:block; }
     .booking-success h3 { font-family:'Unbounded',sans-serif;font-size:0.9rem;letter-spacing:0.08em;color:var(--green);margin-bottom:12px; }
-    .booking-success p { color:var(--gray-light);font-style:italic;font-size:1.05rem; }
+    .booking-success p { color:var(--gray-light);font-size:1.05rem; }
     .form-input.invalid { border-color:var(--red)!important; }
     .form-input.valid { border-color:rgba(39,174,96,0.5)!important; }
   </style>
@@ -17,9 +17,7 @@
 <body>
 
 <nav id="navbar">
-  <a href="index.html" class="nav-logo">
-    <img src="nr40-logo.png" alt="NR40 Urban Arts" class="nav-logo-img">
-  </a>
+  <a href="index.html" class="nav-logo"><img src="nr40-logo.png" alt="NR40 Urban Arts" class="nav-logo-img"></a>
   <ul class="nav-links">
     <li><a href="nr40.html" data-gr="NR40" data-en="NR40">NR40</a></li>
     <li><a href="team.html" data-gr="Tattoo" data-en="Tattoo">Tattoo</a></li>
@@ -27,9 +25,7 @@
     <li><a href="nr40.html#events" data-gr="Events" data-en="Events">Events</a></li>
     <li><a href="contact.html" data-gr="Επικοινωνία" data-en="Contact">Επικοινωνία</a></li>
   </ul>
-  <div class="nav-right">
-    <button class="lang-btn" id="langBtn">EN</button>
-  </div>
+  <div class="nav-right"><button class="lang-btn" id="langBtn">EN</button></div>
   <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
@@ -44,9 +40,9 @@
 <header class="page-header" data-title="BOOKING">
   <div class="container">
     <span class="label" data-gr="Κράτηση Τατουάζ" data-en="Book a Tattoo">Κράτηση Τατουάζ</span>
-    <h1 class="heading" style="font-size:clamp(2.2rem,5vw,4rem);margin-bottom:20px;" data-gr="Κλείσε <em>Ραντεβού</em>" data-en="Book <em>Now</em>">Κλείσε <em>Ραντεβού</em></h1>
+    <h1 class="heading" style="font-size:clamp(2.2rem,5vw,4rem);margin-bottom:20px;" data-gr="Κλείσε Ραντεβού" data-en="Book Now">Κλείσε <em>Ραντεβού</em></h1>
     <div class="gold-rule"></div>
-    <p style="color:var(--gray-light);font-style:italic;max-width:480px;" data-gr="Συμπλήρωσε τη φόρμα και θα επικοινωνήσουμε μαζί σου εντός 24 ωρών." data-en="Fill in the form and we will contact you within 24 hours to confirm.">Συμπλήρωσε τη φόρμα και θα επικοινωνήσουμε εντός 24 ωρών.</p>
+    <p style="color:var(--gray-light);max-width:480px;" data-gr="Συμπλήρωσε τη φόρμα και θα επικοινωνήσουμε εντός 24 ωρών." data-en="Fill in the form and we will contact you within 24 hours.">Συμπλήρωσε τη φόρμα και θα επικοινωνήσουμε εντός 24 ωρών.</p>
   </div>
 </header>
 
@@ -54,70 +50,51 @@
   <div class="split-layout">
     <div class="form-wrap">
       <form id="bookingForm" novalidate>
-
         <div class="form-grid-2">
           <div class="form-group">
             <label class="form-label" for="fullName" data-gr="Ονοματεπώνυμο *" data-en="Full Name *">Ονοματεπώνυμο *</label>
-            <input class="form-input" type="text" id="fullName" name="fullName" required
-              data-ph-gr="π.χ. Νίκος Παπαδόπουλος" data-ph-en="e.g. Nikos Papadopoulos"
-              placeholder="π.χ. Νίκος Παπαδόπουλος">
+            <input class="form-input" type="text" id="fullName" required data-ph-gr="π.χ. Νίκος Παπαδόπουλος" data-ph-en="e.g. Nikos Papadopoulos" placeholder="π.χ. Νίκος Παπαδόπουλος">
           </div>
           <div class="form-group">
             <label class="form-label" for="phone" data-gr="Τηλέφωνο *" data-en="Phone *">Τηλέφωνο *</label>
-            <input class="form-input" type="tel" id="phone" name="phone" required
-              inputmode="tel" autocomplete="tel"
-              data-ph-gr="π.χ. 6912345678" data-ph-en="e.g. +30 6912345678"
-              placeholder="π.χ. 6912345678">
+            <input class="form-input" type="tel" id="phone" required inputmode="tel" autocomplete="tel" data-ph-gr="π.χ. 6912345678" data-ph-en="e.g. +30 6912345678" placeholder="π.χ. 6912345678">
           </div>
         </div>
-
         <div class="form-group">
           <label class="form-label" for="email" data-gr="Email *" data-en="Email *">Email *</label>
-          <input class="form-input" type="email" id="email" name="email" required
-            placeholder="your@email.com" inputmode="email" autocomplete="email">
+          <input class="form-input" type="email" id="email" required placeholder="your@email.com" inputmode="email" autocomplete="email">
         </div>
-
         <div class="form-grid-2">
           <div class="form-group">
-            <label class="form-label" for="service" data-gr="Υπηρεσία *" data-en="Service *">Υπηρεσία *</label>
-            <select class="form-select" id="service" name="service" required>
-              <option value="" disabled selected data-gr="Επέλεξε υπηρεσία" data-en="Select service">Επέλεξε υπηρεσία</option>
-              <option data-gr="Νέο Τατουάζ" data-en="New Tattoo">Νέο Τατουάζ</option>
-              <option data-gr="Cover-Up" data-en="Cover-Up">Cover-Up</option>
-              <option data-gr="Touch-Up / Retouching" data-en="Touch-Up / Retouching">Touch-Up / Retouching</option>
-              <option data-gr="Fine Line" data-en="Fine Line">Fine Line</option>
-              <option data-gr="Traditional" data-en="Traditional">Traditional</option>
-              <option data-gr="Realism" data-en="Realism">Realism</option>
-              <option data-gr="Neo-Traditional" data-en="Neo-Traditional">Neo-Traditional</option>
-              <option data-gr="Geometric / Mandala" data-en="Geometric / Mandala">Geometric / Mandala</option>
-              <option data-gr="Watercolor" data-en="Watercolor">Watercolor</option>
-              <option data-gr="Blackwork" data-en="Blackwork">Blackwork</option>
-              <option data-gr="Japanese / Irezumi" data-en="Japanese / Irezumi">Japanese / Irezumi</option>
-              <option data-gr="Portrait" data-en="Portrait">Portrait</option>
-              <option data-gr="Sleeve" data-en="Sleeve">Sleeve</option>
-              <option data-gr="Lettering / Calligraphy" data-en="Lettering / Calligraphy">Lettering / Calligraphy</option>
+            <label class="form-label" for="service" data-gr="Στυλ *" data-en="Style *">Στυλ *</label>
+            <select class="form-select" id="service" required onchange="updateArtistsByStyle()">
+              <option value="" disabled selected data-gr="Επέλεξε στυλ" data-en="Select style">Επέλεξε στυλ</option>
+              <option value="Traditional">Traditional</option>
+              <option value="Realism">Realism</option>
+              <option value="Neo-Traditional">Neo-Traditional</option>
+              <option value="Geometric / Mandala">Geometric / Mandala</option>
+              <option value="Watercolor">Watercolor</option>
+              <option value="Blackwork">Blackwork</option>
+              <option value="Lettering / Calligraphy">Lettering / Calligraphy</option>
+              <option value="Fine Line">Fine Line</option>
+              <option value="Japanese / Irezumi">Japanese / Irezumi</option>
+              <option value="Portrait">Portrait</option>
+              <option value="Cover-Up">Cover-Up</option>
+              <option value="Touch-Up" data-gr="Touch-Up / Retouching" data-en="Touch-Up / Retouching">Touch-Up / Retouching</option>
+              <option value="Sleeve">Sleeve</option>
+              <option value="Other" data-gr="Άλλο" data-en="Other">Άλλο</option>
             </select>
           </div>
           <div class="form-group">
             <label class="form-label" for="artist" data-gr="Καλλιτέχνης *" data-en="Artist *">Καλλιτέχνης *</label>
-            <select class="form-select" id="artist" name="artist" required>
+            <select class="form-select" id="artist" required>
               <option value="" disabled selected data-gr="Επέλεξε καλλιτέχνη" data-en="Select artist">Επέλεξε καλλιτέχνη</option>
-              <option value="Quipster">Quipster</option>
-              <option value="Valia">Valia</option>
-              <option value="Storm">Storm</option>
-              <option value="Alex">Alex</option>
-              <option value="Jimmy">Jimmy</option>
-              <option value="Konstantinos">Konstantinos</option>
-              <option value="Lacrimost">Lacrimost</option>
-              <option data-gr="Όποιον θέλετε" data-en="Any available">Όποιον θέλετε</option>
             </select>
           </div>
         </div>
-
         <div class="form-group">
           <label class="form-label" data-gr="Φωτογραφίες / Σχέδια" data-en="Photos / Designs">
-            Φωτογραφίες / Σχέδια
-            <span style="color:var(--gray);font-size:0.85em;" data-gr="(έως 5 αρχεία · JPG, PNG, PDF)" data-en="(max 5 files · JPG, PNG, PDF)">(έως 5 αρχεία · JPG, PNG, PDF)</span>
+            Φωτογραφίες / Σχέδια <span style="color:var(--gray);font-size:0.85em;">(έως 5 · JPG, PNG, PDF)</span>
           </label>
           <div class="file-upload" onclick="document.getElementById('fileInput').click()">
             <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.pdf" multiple>
@@ -126,47 +103,37 @@
           </div>
           <div class="file-list" id="fileList"></div>
         </div>
-
         <div class="form-group">
           <label class="form-label" for="message" data-gr="Μήνυμα" data-en="Message">Μήνυμα</label>
-          <textarea class="form-textarea" id="message" name="message"
-            data-ph-gr="Περιέγραψε την ιδέα σου, μέγεθος, τοποθεσία στο σώμα κ.λπ."
-            data-ph-en="Describe your idea, size, body placement, etc."
-            placeholder="Περιέγραψε την ιδέα σου, μέγεθος, τοποθεσία στο σώμα κ.λπ."></textarea>
+          <textarea class="form-textarea" id="message" data-ph-gr="Περιέγραψε την ιδέα σου, μέγεθος, τοποθεσία κ.λπ." data-ph-en="Describe your idea, size, body placement, etc." placeholder="Περιέγραψε την ιδέα σου..."></textarea>
         </div>
-
         <button type="submit" class="submit-btn" id="submitBtn">
           <span class="btn-text" data-gr="Αποστολή Αίτησης" data-en="Submit Request">Αποστολή Αίτησης</span>
           <span class="btn-spinner"></span>
         </button>
         <div class="alert" id="formAlert"></div>
       </form>
-
       <div class="booking-success" id="bookingSuccess">
         <h3 data-gr="✓ Η αίτησή σου στάλθηκε!" data-en="✓ Request Submitted!">✓ Η αίτησή σου στάλθηκε!</h3>
-        <p data-gr="Θα επικοινωνήσουμε μαζί σου εντός 24 ωρών για επιβεβαίωση." data-en="We will contact you within 24 hours to confirm your appointment.">Θα επικοινωνήσουμε μαζί σου εντός 24 ωρών για επιβεβαίωση.</p>
+        <p data-gr="Θα επικοινωνήσουμε μαζί σου εντός 24 ωρών." data-en="We will contact you within 24 hours.">Θα επικοινωνήσουμε μαζί σου εντός 24 ωρών.</p>
       </div>
     </div>
 
     <div class="sidebar">
       <div class="info-card">
-        <div class="info-card-title" data-gr="Ωράριο Λειτουργίας" data-en="Opening Hours">Ωράριο Λειτουργίας</div>
-        <div class="info-row"><span class="info-icon">◷</span><span data-gr="Δευτέρα – Σάββατο: 11:00–21:00" data-en="Monday – Saturday: 11:00–21:00">Δευτέρα – Σάββατο: 11:00–21:00</span></div>
+        <div class="info-card-title" data-gr="Ωράριο Tattoo" data-en="Tattoo Hours">Ωράριο Tattoo</div>
+        <div class="info-row"><span class="info-icon">◷</span><span data-gr="Δευτέρα – Σάββατο: 12:00–21:00" data-en="Monday – Saturday: 12:00–21:00">Δευτέρα – Σάββατο: 12:00–21:00</span></div>
         <div class="info-row"><span class="info-icon">◷</span><span data-gr="Κυριακή: Κλειστά" data-en="Sunday: Closed">Κυριακή: Κλειστά</span></div>
       </div>
       <div class="info-card">
         <div class="info-card-title" data-gr="Σημαντικές Πληροφορίες" data-en="Important Info">Σημαντικές Πληροφορίες</div>
         <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Ελάχιστη ηλικία: 18 ετών" data-en="Minimum age: 18 years">Ελάχιστη ηλικία: 18 ετών</span></div>
-        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Φέρε έγκυρη ταυτότητα" data-en="Bring valid ID">Φέρε έγκυρη ταυτότητα</span></div>
         <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Απάντηση εντός 24 ωρών" data-en="Response within 24 hours">Απάντηση εντός 24 ωρών</span></div>
-        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Ελάχιστο 50€" data-en="Minimum €50">Ελάχιστο 50€</span></div>
+        <div class="info-row"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Τιμές: επικοινωνήστε μαζί μας" data-en="Pricing: contact us">Τιμές: επικοινωνήστε μαζί μας</span></div>
       </div>
       <div class="info-card">
         <div class="info-card-title" data-gr="Piercing;" data-en="Piercing?">Piercing;</div>
-        <div class="info-row" style="margin-bottom:16px;">
-          <span class="info-icon" style="color:var(--gold);">▸</span>
-          <span data-gr="Για piercing χρησιμοποίησε τη φόρμα piercing" data-en="For piercing use the dedicated piercing form">Για piercing χρησιμοποίησε τη φόρμα piercing</span>
-        </div>
+        <div class="info-row" style="margin-bottom:16px;"><span class="info-icon" style="color:var(--gold);">▸</span><span data-gr="Για piercing χρησιμοποίησε τη φόρμα piercing" data-en="For piercing use the piercing form">Για piercing χρησιμοποίησε τη φόρμα piercing</span></div>
         <a href="piercing.html" class="btn btn-ghost btn-sm btn-full" data-gr="Κράτηση Piercing →" data-en="Book Piercing →">Κράτηση Piercing →</a>
       </div>
     </div>
@@ -178,10 +145,8 @@
     <div class="footer-grid">
       <div>
         <div class="footer-logo-row">
-          <a href="index.html" class="footer-logo-link">
-            <img src="nr40-logo.png" alt="NR40 Urban Arts" class="footer-logo-img">
-          </a>
-          <p class="footer-desc" data-gr="Τέχνη που μένει για πάντα." data-en="Art that lasts forever.">Τέχνη που μένει για πάντα.</p>
+          <a href="index.html" class="footer-logo-link"><img src="nr40-logo.png" alt="NR40 Urban Arts" class="footer-logo-img"></a>
+          <p class="footer-desc">Urban Arts</p>
         </div>
       </div>
       <div>
@@ -197,72 +162,76 @@
         <div class="footer-col-title" data-gr="Επικοινωνία" data-en="Contact">Επικοινωνία</div>
         <ul class="footer-links">
           <li><a href="tel:+302103806408">+30 210 380 6408</a></li>
-          <li><a href="mailto:info@nr40athens.com">info@nr40athens.com</a></li>
-          <li><span>Κανιγγός 27, Αθήνα 106 82</span></li>
+          <li><a href="/cdn-cgi/l/email-protection#8de4e3ebe2cde3ffb9bdecf9e5e8e3fea3eee2e0"><span class="__cf_email__" data-cfemail="1f767179705f716d2b2f7e6b777a716c317c7072">[email&#160;protected]</span></a></li>
+          <li><span>Κάνιγγος 27, Αθήνα 106 82</span></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <span>© 2026 NR40.</span>
-      <span>Κανιγγός 27, Αθήνα 106 82</span>
+      <span>Κάνιγγος 27, Αθήνα 106 82</span>
     </div>
   </div>
   <div class="dev-credit">Developed by <a href="https://nikolassapa.vercel.app/" target="_blank" rel="noopener">Nikolas Sapalidis</a></div>
 </footer>
 
-<script src="js/main.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.js"></script>
 <script>
-  let selectedFiles = [];
+  const styleArtistMap = {
+    'Traditional':             ['Quipster'],
+    'Realism':                 ['Alex', 'Shoutone', 'Lacrimosa'],
+    'Neo-Traditional':         ['Quipster', 'Alex'],
+    'Geometric / Mandala':     ['Valia', 'Shoutone'],
+    'Watercolor':              ['Alex', 'Quipster', 'Alice'],
+    'Blackwork':               ['Shoutone', 'Chaos', 'Valia'],
+    'Lettering / Calligraphy': ['Shoutone', 'Alex'],
+  };
+  const ALL_ARTISTS = ['Quipster', 'Valia', 'Alex', 'Shoutone', 'Lacrimosa', 'Chaos', 'Alice', 'Konstantinos'];
 
+  function populateArtists(list) {
+    const artistSelect = document.getElementById('artist');
+    const lang = localStorage.getItem('lang') || 'gr';
+    const placeholder = lang === 'en' ? 'Select artist' : 'Επέλεξε καλλιτέχνη';
+    artistSelect.innerHTML = '<option value="" disabled selected>' + placeholder + '</option>';
+    list.forEach(name => {
+      const opt = document.createElement('option'); opt.value = name; opt.textContent = name; artistSelect.appendChild(opt);
+    });
+    const anyOpt = document.createElement('option'); anyOpt.value = 'Any'; anyOpt.textContent = lang === 'en' ? 'Any available' : 'Όποιον θέλετε'; artistSelect.appendChild(anyOpt);
+  }
+
+  function updateArtistsByStyle() {
+    const service = document.getElementById('service').value;
+    populateArtists(styleArtistMap[service] || ALL_ARTISTS);
+  }
+
+  populateArtists(ALL_ARTISTS);
+
+  let selectedFiles = [];
   const phoneInput = document.getElementById('phone');
   phoneInput.addEventListener('input', function() {
-    let v = this.value.replace(/[^\d+]/g,'');
-    v = v.charAt(0) + v.slice(1).replace(/\+/g,'');
-    this.value = v;
-    const digits = v.replace('+','');
-    this.classList.toggle('invalid', v.length > 0 && digits.length < 7);
-    this.classList.toggle('valid', digits.length >= 7);
+    let v = this.value.replace(/[^\d+]/g,''); v = v.charAt(0) + v.slice(1).replace(/\+/g,''); this.value = v;
+    const digits = v.replace('+',''); this.classList.toggle('invalid', v.length > 0 && digits.length < 7); this.classList.toggle('valid', digits.length >= 7);
   });
-
   const emailInput = document.getElementById('email');
   const isValidEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-  emailInput.addEventListener('blur', function() {
-    if (!this.value) return;
-    this.classList.toggle('invalid', !isValidEmail(this.value));
-    this.classList.toggle('valid', isValidEmail(this.value));
-  });
-  emailInput.addEventListener('input', function() {
-    this.classList.remove('invalid');
-    this.classList.toggle('valid', isValidEmail(this.value));
-  });
-
+  emailInput.addEventListener('blur', function() { if (!this.value) return; this.classList.toggle('invalid', !isValidEmail(this.value)); this.classList.toggle('valid', isValidEmail(this.value)); });
+  emailInput.addEventListener('input', function() { this.classList.remove('invalid'); this.classList.toggle('valid', isValidEmail(this.value)); });
   document.getElementById('fileInput').addEventListener('change', function() {
-    Array.from(this.files).forEach(f => { if (selectedFiles.length < 5) selectedFiles.push(f); });
-    renderFiles(); this.value = '';
+    Array.from(this.files).forEach(f => { if (selectedFiles.length < 5) selectedFiles.push(f); }); renderFiles(); this.value = '';
   });
   function renderFiles() {
     const list = document.getElementById('fileList'); list.innerHTML = '';
-    selectedFiles.forEach((f,i) => {
-      const c = document.createElement('div'); c.className = 'file-chip';
-      c.innerHTML = '<span>' + f.name + ' <span style="color:var(--gray);font-size:0.8em;">(' + (f.size/1024).toFixed(0) + 'kb)</span></span><button type="button" onclick="removeFile(' + i + ')">✕</button>';
-      list.appendChild(c);
-    });
+    selectedFiles.forEach((f,i) => { const c = document.createElement('div'); c.className = 'file-chip'; c.innerHTML = '<span>' + f.name + ' <span style="color:var(--gray);font-size:0.8em;">(' + (f.size/1024).toFixed(0) + 'kb)</span></span><button type="button" onclick="removeFile(' + i + ')">✕</button>'; list.appendChild(c); });
   }
   function removeFile(i) { selectedFiles.splice(i,1); renderFiles(); }
 
   document.getElementById('bookingForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const phoneDigits = phoneInput.value.replace('+','');
-    if (phoneDigits.length < 7) {
-      phoneInput.classList.add('invalid');
-      return showAlert('formAlert','error','✕ Εισάγετε έγκυρο αριθμό τηλεφώνου.','✕ Please enter a valid phone number.');
-    }
-    if (!isValidEmail(emailInput.value.trim())) {
-      emailInput.classList.add('invalid');
-      return showAlert('formAlert','error','✕ Εισάγετε έγκυρη διεύθυνση email.','✕ Please enter a valid email address.');
-    }
-    const btn = document.getElementById('submitBtn');
-    btn.classList.add('loading'); btn.disabled = true;
+    if (phoneDigits.length < 7) { phoneInput.classList.add('invalid'); return showAlert('formAlert','error','✕ Εισάγετε έγκυρο αριθμό τηλεφώνου.','✕ Please enter a valid phone number.'); }
+    if (!isValidEmail(emailInput.value.trim())) { emailInput.classList.add('invalid'); return showAlert('formAlert','error','✕ Εισάγετε έγκυρη διεύθυνση email.','✕ Please enter a valid email address.'); }
+    if (!document.getElementById('artist').value) { return showAlert('formAlert','error','✕ Επέλεξε καλλιτέχνη.','✕ Please select an artist.'); }
+    const btn = document.getElementById('submitBtn'); btn.classList.add('loading'); btn.disabled = true;
     try {
       const fd = new FormData();
       fd.append('fullName', document.getElementById('fullName').value.trim());
@@ -276,12 +245,4 @@
       document.getElementById('bookingForm').style.display = 'none';
       document.getElementById('bookingSuccess').classList.add('visible');
       document.getElementById('bookingSuccess').scrollIntoView({ behavior:'smooth', block:'center' });
-      applyLang();
-    } catch(err) {
-      showAlert('formAlert','error','✕ Σφάλμα. Δοκίμασε ξανά.','✕ Error. Please try again.');
-      btn.classList.remove('loading'); btn.disabled = false;
-    }
-  });
-</script>
-</body>
-</html>
+      appl
