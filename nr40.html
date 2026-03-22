@@ -270,7 +270,7 @@
         <div class="footer-col-title" data-gr="Επικοινωνία" data-en="Contact">Επικοινωνία</div>
         <ul class="footer-links">
           <li><a href="tel:+302103806408">+30 210 380 6408</a></li>
-          <li><a href="mailto:info@nr40athens.com">info@nr40athens.com</a></li>
+          <li><a href="/cdn-cgi/l/email-protection#50393e363f103e226460312438353e237e333f3d"><span class="__cf_email__" data-cfemail="9ff6f1f9f0dff1edabaffeebf7faf1ecb1fcf0f2">[email&#160;protected]</span></a></li>
           <li><span data-gr="Κάνιγγος 27, Αθήνα 106 82" data-en="Kaniggos 27, Athens 106 82">Κάνιγγος 27, Αθήνα 106 82</span></li>
         </ul>
       </div>
@@ -283,16 +283,22 @@
   <div class="dev-credit">Developed by <a href="https://nikolassapa.vercel.app/" target="_blank" rel="noopener">Nikolas Sapalidis</a></div>
 </footer>
 
-<script src="js/main.js"></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.js"></script>
 <script>
 const API = 'https://backend-63o7.onrender.com';
 
-// Load about image from gallery (first studio photo by order)
+// Load about image — use featured studio photo, fall back to first studio photo
 (async function() {
   try {
-    const res = await fetch(API + '/api/gallery?type=studio');
-    if (!res.ok) return;
-    const photos = await res.json();
+    let photos = [];
+    // Try featured first
+    const resFeatured = await fetch(API + '/api/gallery?type=studio&featured=true');
+    if (resFeatured.ok) photos = await resFeatured.json();
+    // Fall back to first studio photo if none featured
+    if (!photos.length) {
+      const res = await fetch(API + '/api/gallery?type=studio');
+      if (res.ok) photos = await res.json();
+    }
     if (photos.length) {
       const img = document.getElementById('aboutImg');
       img.src = photos[0].url;

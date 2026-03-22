@@ -79,6 +79,8 @@
     .gallery-admin-overlay { position:absolute;inset:0;background:rgba(8,8,8,0.75);opacity:0;transition:opacity 0.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:8px; }
     .gallery-admin-item:hover .gallery-admin-overlay { opacity:1; }
     .gallery-admin-caption { font-family:'Space Mono',monospace;font-size:0.52rem;color:var(--gray-light);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%; }
+    .gallery-admin-item.is-featured { border-color:var(--gold);box-shadow:0 0 0 1px var(--gold); }
+    .gallery-featured-badge { position:absolute;top:6px;left:6px;background:var(--gold);color:var(--black);font-family:'Space Mono',monospace;font-size:0.48rem;letter-spacing:0.1em;text-transform:uppercase;padding:3px 7px;font-weight:700;pointer-events:none; }
     .gallery-upload-zone { border:1px dashed var(--border);padding:40px 24px;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;background:var(--dark);display:flex;flex-direction:column;align-items:center;gap:12px; }
     .gallery-upload-zone:hover { border-color:var(--gold);background:rgba(201,168,76,0.04); }
     .gallery-upload-zone input { display:none; }
@@ -96,7 +98,7 @@
     .event-admin-body { padding:16px; }
     .event-admin-date { font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--gold);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:6px; }
     .event-admin-title { font-family:'Unbounded',sans-serif;font-size:0.8rem;font-weight:700;margin-bottom:6px;line-height:1.3; }
-    .event-admin-desc { font-size:0.85rem;color:var(--gray-light);font-style:italic;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2; line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; }
+    .event-admin-desc { font-size:0.85rem;color:var(--gray-light);font-style:italic;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden; }
     .event-admin-actions { display:flex;gap:8px; }
     .event-upload-zone { border:1px dashed var(--border);padding:32px 20px;text-align:center;cursor:pointer;background:var(--dark);display:flex;flex-direction:column;align-items:center;gap:10px;transition:border-color 0.2s; }
     .event-upload-zone:hover { border-color:var(--gold); }
@@ -482,10 +484,17 @@
       if (!photos.length) { grid.innerHTML = '<div class="gallery-empty" style="grid-column:1/-1;">No ' + type + ' photos yet.</div>'; return; }
       grid.innerHTML = '';
       photos.forEach(photo => {
-        const item = document.createElement('div'); item.className = 'gallery-admin-item';
-        item.innerHTML = '<img src="' + photo.url + '" alt="' + (photo.caption||'') + '" loading="lazy"><div class="gallery-admin-overlay">' + (photo.caption ? '<div class="gallery-admin-caption">' + photo.caption + '</div>' : '') + '<div style="display:flex;gap:6px;"><button class="btn btn-ghost btn-sm g-edit-btn" style="font-size:0.55rem;padding:6px 10px;">Edit</button><button class="btn btn-danger btn-sm g-del-btn" style="font-size:0.55rem;padding:6px 10px;">Delete</button></div></div>';
+        const item = document.createElement('div'); item.className = 'gallery-admin-item' + (photo.featured ? ' is-featured' : '');
+        const featuredBadge = photo.featured ? '<div class="gallery-featured-badge">★ About Photo</div>' : '';
+        const featuredBtn = (type === 'studio' && !photo.featured)
+          ? '<button class="btn btn-gold btn-sm g-feat-btn" style="font-size:0.5rem;padding:5px 8px;white-space:nowrap;">★ Set as About</button>'
+          : '';
+        item.innerHTML = '<img src="' + photo.url + '" alt="' + (photo.caption||'') + '" loading="lazy">' + featuredBadge + '<div class="gallery-admin-overlay">' + (photo.caption ? '<div class="gallery-admin-caption">' + photo.caption + '</div>' : '') + '<div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">' + featuredBtn + '<button class="btn btn-ghost btn-sm g-edit-btn" style="font-size:0.55rem;padding:6px 10px;">Edit</button><button class="btn btn-danger btn-sm g-del-btn" style="font-size:0.55rem;padding:6px 10px;">Delete</button></div></div>';
         item.querySelector('.g-edit-btn').addEventListener('click', () => editGalleryPhoto(photo._id, photo.caption||'', photo.order));
         item.querySelector('.g-del-btn').addEventListener('click', () => deleteGalleryPhoto(photo._id, type));
+        if (item.querySelector('.g-feat-btn')) {
+          item.querySelector('.g-feat-btn').addEventListener('click', () => setFeaturedPhoto(photo._id, type));
+        }
         grid.appendChild(item);
       });
     } catch(err) { grid.innerHTML = '<div style="color:var(--red);padding:20px;grid-column:1/-1;">' + err.message + '</div>'; }
@@ -502,6 +511,13 @@
   }
   function editGalleryPhoto(id, caption, order) { const c = prompt('Caption:', caption); if (c === null) return; const o = prompt('Display order:', order); if (o === null) return; apiAuthPatch('/api/gallery/' + id, { caption: c, order: parseInt(o)||0 }).then(() => { galleryCache[currentGalleryType] = null; renderGalleryGrid(currentGalleryType); }).catch(err => alert(err.message)); }
   async function deleteGalleryPhoto(id, type) { if (!confirm('Delete this photo?')) return; try { await apiAuthDelete('/api/gallery/' + id); galleryCache[type] = null; renderGalleryGrid(type); } catch(err) { alert(err.message); } }
+  async function setFeaturedPhoto(id, type) {
+    try {
+      await apiAuthPatch('/api/gallery/' + id, { featured: true });
+      galleryCache[type] = null;
+      renderGalleryGrid(type);
+    } catch(err) { alert(err.message); }
+  }
 
   // ── EVENTS ──
   let editingEvent = null;
