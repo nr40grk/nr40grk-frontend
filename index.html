@@ -59,9 +59,9 @@
     .loader-logo { width: 120px; height: auto; opacity: 0; animation: loaderFadeIn 0.8s ease 0.2s forwards; }
     @keyframes loaderFadeIn { to { opacity: 1; } }
 
-    .hub { width: 100%; height: 100%; display: grid; grid-template-columns: 1fr 72px; background: #080808; }
+    .hub { width: 100%; height: 100%; position: relative; background: #080808; }
 
-    .hub-main { height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 36px 56px; }
+    .hub-main { height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 36px 128px 36px 56px; }
 
     .hub-top { display: flex; align-items: center; justify-content: flex-end; gap: 16px; flex-shrink: 0; }
     .hub-rating { display: flex; align-items: center; gap: 8px; }
@@ -135,8 +135,8 @@
     .hub-hours-val { font-family: 'Space Mono', monospace; font-size: 0.48rem; letter-spacing: 0.1em; color: #666; text-transform: uppercase; }
     .hub-address { font-family: 'Space Mono', monospace; font-size: 0.5rem; letter-spacing: 0.14em; color: #555; text-transform: uppercase; text-align: right; }
 
-    /* Right sidebar */
-    .hub-sidebar { border-left: 1px solid #1e1e1e; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 40px 0; }
+    /* Right sidebar — absolute so hub-main fills full width for true centering */
+    .hub-sidebar { position: absolute; top: 0; right: 0; width: 72px; height: 100%; border-left: 1px solid #1e1e1e; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding: 40px 0; }
     .hub-sidebar-dot { width: 6px; height: 6px; border-radius: 50%; background: #c9a84c; opacity: 0.6; }
     .hub-sidebar-text { font-family: 'Space Mono', monospace; font-size: 0.52rem; letter-spacing: 0.22em; color: #666; text-transform: uppercase; writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; }
     .hub-sidebar-ig { display: flex; flex-direction: column; align-items: center; gap: 12px; }
@@ -215,7 +215,7 @@
         </div>
         <div class="hub-hours-group">
           <div class="hub-hours-label" id="labelEvents">Events</div>
-          <div class="hub-hours-val" id="valEvents">Παρ–Σαβ μετά τις 02:00</div>
+          <div class="hub-hours-val" id="valEvents">Παρ–Σαβ έως τις 02:00</div>
         </div>
       </div>
       <span class="hub-address" id="hubAddress">Κάνιγγος 27 · Αθήνα 106 82</span>
@@ -253,7 +253,7 @@
       address: 'Κάνιγγος 27 · Αθήνα 106 82',
       labelCafe: 'Cafe Bar', valCafe: 'Δευ–Σαβ 10:00–21:00',
       labelTattoo: 'Tattoo', valTattoo: 'Δευ–Σαβ 12:00–21:00',
-      labelEvents: 'Events', valEvents: 'Παρ–Σαβ μετά τις 02:00',
+      labelEvents: 'Events', valEvents: 'Παρ–Σαβ έως τις 02:00',
       btn: 'EN'
     },
     en: {
@@ -261,7 +261,7 @@
       address: 'Kaniggos 27 · Athens 106 82',
       labelCafe: 'Cafe Bar', valCafe: 'Mon–Sat 10:00–21:00',
       labelTattoo: 'Tattoo', valTattoo: 'Mon–Sat 12:00–21:00',
-      labelEvents: 'Events', valEvents: 'Fri–Sat after 02:00',
+      labelEvents: 'Events', valEvents: 'Fri–Sat until 02:00',
       btn: 'ΕΛ'
     }
   };
