@@ -58,6 +58,12 @@
   .form-input.invalid { border-color: var(--red) !important; }
   .form-input.valid { border-color: rgba(39,174,96,0.5) !important; }
 
+  .consultation-notice { background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.3);border-left:3px solid var(--gold);padding:24px 28px;margin-bottom:32px; }
+  .consultation-notice-title { font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:12px; }
+  .consultation-notice p { color:var(--gray-light);font-size:0.97rem;line-height:1.7;margin-bottom:10px; }
+  .consultation-notice p:last-child { margin-bottom:0; }
+  .consultation-notice .free-badge { display:inline-block;font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(201,168,76,0.4);padding:4px 10px;margin-top:4px; }
+
   @media (max-width: 1024px) { .artists-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 900px) { .booking-section-inner { grid-template-columns: 1fr; gap: 48px; } }
   @media (max-width: 700px) { .artists-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } .lb-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -128,6 +134,14 @@
     </div>
     <div class="booking-section-inner">
       <div class="form-wrap">
+
+        <div class="consultation-notice">
+          <div class="consultation-notice-title" data-gr="Σημαντική Ενημέρωση" data-en="Important Notice">Σημαντική Ενημέρωση</div>
+          <p data-gr="Τα ραντεβού που κλείνονται μέσω της ιστοσελίδας μας αφορούν αποκλειστικά tattoo consultation και όχι την πραγματοποίηση του ίδιου του τατουάζ." data-en="Appointments booked through our website are exclusively for tattoo consultation and not for the tattoo session itself.">Τα ραντεβού που κλείνονται μέσω της ιστοσελίδας μας αφορούν αποκλειστικά tattoo consultation και όχι την πραγματοποίηση του ίδιου του τατουάζ.</p>
+          <p data-gr="Η συμβουλευτική συνεδρία είναι ένα σημαντικό πρώτο βήμα, κατά το οποίο συζητάμε την ιδέα σας, το σχέδιο, το σημείο στο σώμα, καθώς και όλες τις απαραίτητες λεπτομέρειες, ώστε να διασφαλίσουμε το καλύτερο δυνατό αποτέλεσμα. Είναι μια διαδικασία που προτείνουμε ανεπιφύλακτα σε κάθε πελάτη πριν προχωρήσει στο τατουάζ." data-en="The consultation session is an important first step where we discuss your idea, the design, the placement on your body, and all the necessary details to ensure the best possible result. It is a process we wholeheartedly recommend to every client before proceeding with the tattoo.">Η συμβουλευτική συνεδρία είναι ένα σημαντικό πρώτο βήμα, κατά το οποίο συζητάμε την ιδέα σας, το σχέδιο, το σημείο στο σώμα, καθώς και όλες τις απαραίτητες λεπτομέρειες, ώστε να διασφαλίσουμε το καλύτερο δυνατό αποτέλεσμα. Είναι μια διαδικασία που προτείνουμε ανεπιφύλακτα σε κάθε πελάτη πριν προχωρήσει στο τατουάζ.</p>
+          <span class="free-badge" data-gr="✓ Το πρώτο consultation είναι εντελώς δωρεάν" data-en="✓ The first consultation is completely free">✓ Το πρώτο consultation είναι εντελώς δωρεάν</span>
+        </div>
+
         <form id="bookingForm" novalidate>
           <div class="form-grid-2">
             <div class="form-group">
@@ -293,7 +307,6 @@
     populateArtists(styleArtistMap[service] || ALL_ARTISTS);
   }
 
-  // Show all artists on load
   populateArtists(ALL_ARTISTS);
 
   let currentPhotos = [];
