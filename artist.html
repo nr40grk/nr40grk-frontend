@@ -15,14 +15,27 @@
     .artist-hero-name { font-family: 'Unbounded', sans-serif; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 900; line-height: 1.1; margin-bottom: 12px; }
     .artist-hero-role { font-family: 'Space Mono', monospace; font-size: 0.7rem; color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 28px; }
     .gold-rule { width: 48px; height: 2px; background: var(--gold); margin-bottom: 28px; }
-    .artist-hero-bio { font-size: 1.05rem; color: var(--gray-light); font-style: italic; line-height: 1.75; margin-bottom: 36px; }
+    .artist-hero-bio { font-size: 1.05rem; color: var(--gray-light); line-height: 1.75; margin-bottom: 36px; }
+
+    /* Testimonials */
+    .testimonials-section { padding: 0 0 60px; }
+    .testimonials-title { font-family: 'Unbounded', sans-serif; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .testimonials-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .testimonial-card { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--gold); padding: 24px; }
+    .testimonial-text { font-size: 0.97rem; color: var(--gray-light); line-height: 1.7; margin-bottom: 14px; font-style: italic; }
+    .testimonial-text::before { content: '\201C'; color: var(--gold); font-size: 1.4rem; line-height: 0; vertical-align: -0.3em; margin-right: 2px; }
+    .testimonial-text::after { content: '\201D'; color: var(--gold); font-size: 1.4rem; line-height: 0; vertical-align: -0.3em; margin-left: 2px; }
+    .testimonial-author { font-family: 'Space Mono', monospace; font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); }
+    .testimonial-rating { color: var(--gold); font-size: 0.75rem; margin-bottom: 8px; }
+    .no-testimonials { color: var(--gray); font-style: italic; font-size: 0.95rem; padding: 20px 0; }
+
     .portfolio-section { padding: 0 0 100px; }
     .portfolio-section-title { font-family: 'Unbounded', sans-serif; font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
     .portfolio-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .portfolio-item { aspect-ratio: 1; overflow: hidden; cursor: zoom-in; background: var(--card); }
     .portfolio-item img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(30%); transition: transform 0.4s, filter 0.3s; }
     .portfolio-item:hover img { transform: scale(1.06); filter: grayscale(0%); }
-    .no-photos { grid-column: 1/-1; text-align: center; padding: 60px; color: var(--gray); font-style: italic; }
+    .no-photos { grid-column: 1/-1; text-align: center; padding: 60px; color: var(--gray); }
     .zoom-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.97); z-index: 2000; align-items: center; justify-content: center; }
     .zoom-overlay.open { display: flex; }
     .zoom-overlay img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
@@ -33,7 +46,8 @@
     .zoom-next { right: 28px; }
     .zoom-prev:hover, .zoom-next:hover { border-color: var(--gold); color: var(--gold); }
     .error-state { text-align: center; padding: 120px 24px; color: var(--gray); }
-    @media (max-width: 900px) { .artist-hero { grid-template-columns: 1fr; gap: 32px; } .artist-hero-img { max-height: 480px; width: 100%; } }
+
+    @media (max-width: 900px) { .artist-hero { grid-template-columns: 1fr; gap: 32px; } .artist-hero-img { max-height: 480px; width: 100%; } .testimonials-grid { grid-template-columns: 1fr; } }
     @media (max-width: 600px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
   </style>
 </head>
@@ -130,6 +144,29 @@
       photos = a.photos || [];
       document.title = a.name + ' — NR40';
       const coverUrl = a.profilePhoto?.url || photos[0]?.url || '';
+
+      // Fetch testimonials
+      let testimonials = [];
+      try { testimonials = await apiGet('/api/testimonials?artistId=' + id); } catch(_) {}
+
+      // Build testimonials HTML
+      let testimonialsHtml = '';
+      if (testimonials.length) {
+        const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+        const cards = testimonials.map(t =>
+          '<div class="testimonial-card">' +
+          (t.rating ? '<div class="testimonial-rating">' + stars(t.rating) + '</div>' : '') +
+          '<div class="testimonial-text">' + t.text + '</div>' +
+          '<div class="testimonial-author">— ' + t.clientName + '</div>' +
+          '</div>'
+        ).join('');
+        testimonialsHtml =
+          '<div class="testimonials-section">' +
+          '<div class="testimonials-title" data-gr="Τι λένε οι πελάτες" data-en="Client Reviews">Τι λένε οι πελάτες</div>' +
+          '<div class="testimonials-grid">' + cards + '</div>' +
+          '</div>';
+      }
+
       content.innerHTML =
         '<div class="artist-hero">' +
         (coverUrl ? '<img class="artist-hero-img" src="' + coverUrl + '" alt="' + a.name + '">' : '<div class="artist-hero-placeholder">📷</div>') +
@@ -140,7 +177,9 @@
         '<div class="artist-hero-bio">' + (a.bio[lang] || a.bio.gr) + '</div>' +
         '<a href="team.html#book" class="submit-btn" style="display:inline-block;text-decoration:none;padding:14px 32px;" data-gr="Κλείσε Ραντεβού" data-en="Book Now">Κλείσε Ραντεβού</a>' +
         '</div></div>' +
+        testimonialsHtml +
         '<div class="portfolio-section"><div class="portfolio-section-title" data-gr="Portfolio" data-en="Portfolio">Portfolio</div><div class="portfolio-grid" id="portfolioGrid"></div></div>';
+
       const grid = document.getElementById('portfolioGrid');
       if (!photos.length) {
         grid.innerHTML = '<div class="no-photos" data-gr="Δεν υπάρχουν φωτογραφίες ακόμα." data-en="No photos yet.">Δεν υπάρχουν φωτογραφίες ακόμα.</div>';
