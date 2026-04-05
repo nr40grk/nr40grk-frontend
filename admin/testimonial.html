@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testimonials — NR40 Admin</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body { display:flex;flex-direction:column;min-height:100vh; }
+    .admin-nav { position:sticky;top:0;z-index:100;background:var(--dark);border-bottom:1px solid var(--border);padding:0 40px;display:flex;align-items:center;justify-content:space-between;height:60px;flex-shrink:0; }
+    .admin-logo { font-family:'Unbounded',sans-serif;font-size:0.85rem;font-weight:900;letter-spacing:0.1em; }
+    .admin-logo span { color:var(--gold); }
+    .admin-logo small { font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--gray);letter-spacing:0.2em;margin-left:10px;text-transform:uppercase; }
+    .admin-nav-right { display:flex;align-items:center;gap:12px; }
+    .admin-logout { font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;background:none;border:1px solid var(--border);color:var(--gray);padding:7px 14px;cursor:pointer;transition:all 0.2s; }
+    .admin-logout:hover { border-color:var(--red);color:var(--red); }
+    .admin-body { display:flex;flex:1; }
+    .admin-sidebar { width:220px;flex-shrink:0;background:var(--dark);border-right:1px solid var(--border);padding:32px 0;display:flex;flex-direction:column;gap:4px; }
+    .sidebar-link { display:flex;align-items:center;gap:10px;padding:12px 24px;font-family:'Space Mono',monospace;font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--gray);text-decoration:none;border:none;background:none;width:100%;text-align:left;border-left:2px solid transparent;transition:all 0.2s;cursor:pointer; }
+    .sidebar-link:hover { color:var(--white);background:rgba(255,255,255,0.03); }
+    .sidebar-link.active { color:var(--gold);border-left-color:var(--gold);background:rgba(201,168,76,0.05); }
+    .admin-main { flex:1;overflow-y:auto;padding:40px; }
+    .section-head { display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--border); }
+    .section-head h2 { font-family:'Unbounded',sans-serif;font-size:0.9rem;font-weight:700;letter-spacing:0.06em; }
+
+    /* Artist picker */
+    .artist-pick-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:40px; }
+    .artist-pick-card { background:var(--card);border:1px solid var(--border);padding:0;overflow:hidden;cursor:pointer;transition:border-color 0.2s; }
+    .artist-pick-card:hover { border-color:rgba(201,168,76,0.4); }
+    .artist-pick-card.selected { border-color:var(--gold);box-shadow:0 0 0 1px var(--gold); }
+    .artist-pick-img { width:100%;aspect-ratio:3/2;object-fit:cover;display:block;filter:grayscale(40%);transition:filter 0.3s; }
+    .artist-pick-card.selected .artist-pick-img { filter:grayscale(0%); }
+    .artist-pick-body { padding:12px 14px; }
+    .artist-pick-name { font-family:'Unbounded',sans-serif;font-size:0.75rem;font-weight:700; }
+    .artist-pick-role { font-family:'Space Mono',monospace;font-size:0.55rem;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-top:3px; }
+    .artist-pick-count { font-family:'Space Mono',monospace;font-size:0.52rem;color:var(--gray);margin-top:4px; }
+
+    /* Testimonials panel */
+    .testimonials-panel { display:none; }
+    .testimonials-panel.visible { display:block; }
+    .selected-artist-bar { display:flex;align-items:center;gap:16px;margin-bottom:28px;padding:16px 20px;background:rgba(201,168,76,0.05);border:1px solid rgba(201,168,76,0.2); }
+    .selected-artist-bar img { width:52px;height:52px;object-fit:cover;border-radius:0; }
+    .selected-artist-bar-name { font-family:'Unbounded',sans-serif;font-size:0.85rem;font-weight:700; }
+    .selected-artist-bar-role { font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--gold);letter-spacing:0.1em;text-transform:uppercase;margin-top:3px; }
+    .selected-artist-bar-back { margin-left:auto;font-family:'Space Mono',monospace;font-size:0.58rem;letter-spacing:0.1em;color:var(--gray);background:none;border:1px solid var(--border);padding:7px 14px;cursor:pointer;transition:all 0.2s; }
+    .selected-artist-bar-back:hover { border-color:var(--gold);color:var(--gold); }
+
+    /* Add form */
+    .add-testimonial-form { background:var(--card);border:1px solid var(--border);padding:28px;margin-bottom:32px; }
+    .add-testimonial-title { font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:20px; }
+
+    /* Testimonials list */
+    .testimonials-list { display:flex;flex-direction:column;gap:14px; }
+    .testimonial-item { background:var(--card);border:1px solid var(--border);border-left:3px solid var(--gold);padding:20px 24px;display:flex;gap:20px;align-items:flex-start; }
+    .testimonial-item-body { flex:1; }
+    .testimonial-item-text { font-size:0.97rem;color:var(--gray-light);line-height:1.7;margin-bottom:10px; }
+    .testimonial-item-meta { display:flex;align-items:center;gap:16px; }
+    .testimonial-item-author { font-family:'Space Mono',monospace;font-size:0.6rem;letter-spacing:0.14em;color:var(--gold);text-transform:uppercase; }
+    .testimonial-item-rating { color:var(--gold);font-size:0.7rem; }
+    .testimonial-item-actions { flex-shrink:0; }
+    .testimonials-empty { color:var(--gray);font-size:0.95rem;padding:32px 0;text-align:center; }
+
+    /* Stars input */
+    .star-input { display:flex;gap:4px;margin-bottom:4px; }
+    .star-input span { font-size:1.4rem;cursor:pointer;color:var(--border);transition:color 0.15s; }
+    .star-input span.on { color:var(--gold); }
+
+    .modal-overlay { display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:3000;align-items:center;justify-content:center;padding:16px; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:var(--card);border:1px solid var(--border);padding:40px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;position:relative; }
+    .modal-title { font-family:'Unbounded',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:24px; }
+    .modal-close { position:absolute;top:16px;right:16px;background:none;border:1px solid var(--border);color:var(--white);width:36px;height:36px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center; }
+    .modal-close:hover { border-color:var(--gold);color:var(--gold); }
+    .modal-actions { display:flex;gap:12px;margin-top:24px; }
+
+    @media(max-width:900px){ .admin-sidebar{display:none;} .artist-pick-grid{grid-template-columns:repeat(2,1fr);} }
+    @media(max-width:600px){ .artist-pick-grid{grid-template-columns:1fr;} .admin-main{padding:16px;} .admin-nav{padding:0 16px;} .admin-logo small{display:none;} }
+  </style>
+</head>
+<body>
+
+<nav class="admin-nav">
+  <div class="admin-logo">Nr 40<small>Admin</small></div>
+  <div class="admin-nav-right">
+    <a href="../index.html" style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--gray);text-decoration:none;letter-spacing:0.1em;" target="_blank">↗ Site</a>
+    <button class="admin-logout" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<div class="admin-body">
+  <aside class="admin-sidebar">
+    <a class="sidebar-link" href="dashboard.html">📊 Overview</a>
+    <a class="sidebar-link" href="dashboard.html#artists">🎨 Artists</a>
+    <a class="sidebar-link" href="dashboard.html#gallery">🖼️ Gallery</a>
+    <a class="sidebar-link" href="dashboard.html#events">📅 Events</a>
+    <a class="sidebar-link" href="dashboard.html#bookings">📋 Bookings</a>
+    <a class="sidebar-link" href="dashboard.html#piercing">💎 Piercing</a>
+    <a class="sidebar-link" href="dashboard.html#contacts">✉️ Messages</a>
+    <a class="sidebar-link active" href="testimonials.html">⭐ Testimonials</a>
+  </aside>
+
+  <main class="admin-main">
+
+    <!-- ARTIST PICKER -->
+    <div id="artistPickerSection">
+      <div class="section-head">
+        <h2>Testimonials</h2>
+        <span style="font-family:'Space Mono',monospace;font-size:0.58rem;color:var(--gray);letter-spacing:0.08em;">Select an artist to manage their client reviews</span>
+      </div>
+      <div class="artist-pick-grid" id="artistPickGrid">
+        <div style="color:var(--gray);font-style:italic;padding:40px;grid-column:1/-1;">Loading artists...</div>
+      </div>
+    </div>
+
+    <!-- TESTIMONIALS PANEL (shown after artist selected) -->
+    <div class="testimonials-panel" id="testimonialsPanel">
+
+      <div class="selected-artist-bar" id="selectedArtistBar">
+        <img id="selArtistImg" src="" alt="">
+        <div>
+          <div class="selected-artist-bar-name" id="selArtistName"></div>
+          <div class="selected-artist-bar-role" id="selArtistRole"></div>
+        </div>
+        <button class="selected-artist-bar-back" onclick="backToArtists()">← All Artists</button>
+      </div>
+
+      <!-- Add form -->
+      <div class="add-testimonial-form">
+        <div class="add-testimonial-title">Add New Testimonial</div>
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label class="form-label">Client Name *</label>
+            <input class="form-input" id="tClientName" placeholder="e.g. Maria K." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rating</label>
+            <div class="star-input" id="starInput">
+              <span data-val="1">★</span>
+              <span data-val="2">★</span>
+              <span data-val="3">★</span>
+              <span data-val="4">★</span>
+              <span data-val="5">★</span>
+            </div>
+            <input type="hidden" id="tRating" value="5">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Testimonial Text *</label>
+          <textarea class="form-textarea" id="tText" style="min-height:100px;" placeholder="Client's review text..."></textarea>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <button class="submit-btn" id="addTestimonialBtn" style="margin-top:0;flex:1;" onclick="addTestimonial()">
+            <span class="btn-text">Add Testimonial</span>
+            <span class="btn-spinner"></span>
+          </button>
+        </div>
+        <div class="alert" id="addAlert" style="margin-top:12px;"></div>
+      </div>
+
+      <!-- List -->
+      <div class="section-head" style="margin-bottom:16px;">
+        <h2 id="testimonialsListTitle">Testimonials</h2>
+      </div>
+      <div class="testimonials-list" id="testimonialsList">
+        <div class="testimonials-empty">Loading...</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="editModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeEditModal()">✕</button>
+    <div class="modal-title">Edit Testimonial</div>
+    <input type="hidden" id="editId">
+    <div class="form-group">
+      <label class="form-label">Client Name *</label>
+      <input class="form-input" id="editClientName" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Rating</label>
+      <div class="star-input" id="editStarInput">
+        <span data-val="1">★</span>
+        <span data-val="2">★</span>
+        <span data-val="3">★</span>
+        <span data-val="4">★</span>
+        <span data-val="5">★</span>
+      </div>
+      <input type="hidden" id="editRating" value="5">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Text *</label>
+      <textarea class="form-textarea" id="editText" style="min-height:100px;"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="submit-btn" id="editSaveBtn" style="margin-top:0;flex:1;" onclick="saveEdit()"><span class="btn-text">Save</span><span class="btn-spinner"></span></button>
+      <button class="btn btn-ghost" onclick="closeEditModal()">Cancel</button>
+    </div>
+    <div class="alert" id="editAlert" style="margin-top:12px;"></div>
+  </div>
+</div>
+
+<script src="../js/main.js"></script>
+<script>
+  if (!isLoggedIn()) window.location.href = 'login.html';
+  function logout() { clearToken(); window.location.href = 'login.html'; }
+
+  let selectedArtist = null;
+  let artistsCache = [];
+
+  // ── STAR INPUT ──
+  function initStars(containerId, hiddenId) {
+    const container = document.getElementById(containerId);
+    const hidden = document.getElementById(hiddenId);
+    let val = parseInt(hidden.value) || 5;
+    function render() {
+      container.querySelectorAll('span').forEach(s => {
+        s.classList.toggle('on', parseInt(s.dataset.val) <= val);
+      });
+    }
+    container.querySelectorAll('span').forEach(s => {
+      s.addEventListener('click', () => { val = parseInt(s.dataset.val); hidden.value = val; render(); });
+      s.addEventListener('mouseenter', () => { container.querySelectorAll('span').forEach(ss => ss.classList.toggle('on', parseInt(ss.dataset.val) <= parseInt(s.dataset.val))); });
+      s.addEventListener('mouseleave', () => render());
+    });
+    render();
+  }
+  initStars('starInput', 'tRating');
+  initStars('editStarInput', 'editRating');
+
+  // ── LOAD ARTISTS ──
+  async function loadArtists() {
+    const grid = document.getElementById('artistPickGrid');
+    try {
+      artistsCache = await apiAuthGet('/api/artists/all');
+      if (!artistsCache.length) { grid.innerHTML = '<div style="color:var(--gray);font-style:italic;padding:40px;grid-column:1/-1;">No artists found.</div>'; return; }
+      // Fetch testimonial counts for all artists
+      let counts = {};
+      try {
+        const all = await apiAuthGet('/api/testimonials');
+        all.forEach(t => { counts[t.artistId] = (counts[t.artistId] || 0) + 1; });
+      } catch(_) {}
+      grid.innerHTML = '';
+      artistsCache.forEach(a => {
+        const card = document.createElement('div'); card.className = 'artist-pick-card';
+        const cover = a.profilePhoto?.url || a.photos?.[0]?.url || '';
+        const count = counts[a._id] || 0;
+        card.innerHTML =
+          (cover ? '<img class="artist-pick-img" src="' + cover + '" alt="' + a.name + '" loading="lazy">' : '<div style="width:100%;aspect-ratio:3/2;background:var(--dark);display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--border);">📷</div>') +
+          '<div class="artist-pick-body">' +
+          '<div class="artist-pick-name">' + a.name + '</div>' +
+          '<div class="artist-pick-role">' + (a.role?.en || '') + '</div>' +
+          '<div class="artist-pick-count">' + count + ' testimonial' + (count !== 1 ? 's' : '') + '</div>' +
+          '</div>';
+        card.addEventListener('click', () => selectArtist(a));
+        grid.appendChild(card);
+      });
+    } catch(err) { grid.innerHTML = '<div style="color:var(--red);padding:40px;grid-column:1/-1;">' + err.message + '</div>'; }
+  }
+
+  function selectArtist(artist) {
+    selectedArtist = artist;
+    // Update bar
+    const cover = artist.profilePhoto?.url || artist.photos?.[0]?.url || '';
+    document.getElementById('selArtistImg').src = cover;
+    document.getElementById('selArtistName').textContent = artist.name;
+    document.getElementById('selArtistRole').textContent = artist.role?.en || '';
+    document.getElementById('testimonialsListTitle').textContent = artist.name + ' — Testimonials';
+    // Clear form
+    document.getElementById('tClientName').value = '';
+    document.getElementById('tText').value = '';
+    document.getElementById('tRating').value = '5';
+    initStars('starInput', 'tRating');
+    // Show panel
+    document.getElementById('artistPickerSection').style.display = 'none';
+    document.getElementById('testimonialsPanel').classList.add('visible');
+    loadTestimonials();
+  }
+
+  function backToArtists() {
+    selectedArtist = null;
+    document.getElementById('testimonialsPanel').classList.remove('visible');
+    document.getElementById('artistPickerSection').style.display = '';
+    loadArtists();
+  }
+
+  // ── TESTIMONIALS ──
+  async function loadTestimonials() {
+    const list = document.getElementById('testimonialsList');
+    list.innerHTML = '<div class="testimonials-empty">Loading...</div>';
+    try {
+      const items = await apiAuthGet('/api/testimonials?artistId=' + selectedArtist._id);
+      if (!items.length) { list.innerHTML = '<div class="testimonials-empty">No testimonials yet. Add the first one above.</div>'; return; }
+      const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+      list.innerHTML = '';
+      items.forEach(t => {
+        const item = document.createElement('div'); item.className = 'testimonial-item';
+        item.innerHTML =
+          '<div class="testimonial-item-body">' +
+          '<div class="testimonial-item-text">' + t.text + '</div>' +
+          '<div class="testimonial-item-meta">' +
+          '<span class="testimonial-item-author">— ' + t.clientName + '</span>' +
+          (t.rating ? '<span class="testimonial-item-rating">' + stars(t.rating) + '</span>' : '') +
+          '</div></div>' +
+          '<div class="testimonial-item-actions">' +
+          '<div style="display:flex;flex-direction:column;gap:8px;">' +
+          '<button class="btn btn-ghost btn-sm" onclick=\'openEditModal(' + JSON.stringify(t).replace(/'/g,"&apos;") + ')\'>✏️</button>' +
+          '<button class="btn btn-danger btn-sm" onclick="deleteTestimonial(\'' + t._id + '\')">✕</button>' +
+          '</div></div>';
+        list.appendChild(item);
+      });
+    } catch(err) { list.innerHTML = '<div style="color:var(--red);padding:20px;">' + err.message + '</div>'; }
+  }
+
+  async function addTestimonial() {
+    const name = document.getElementById('tClientName').value.trim();
+    const text = document.getElementById('tText').value.trim();
+    const rating = parseInt(document.getElementById('tRating').value) || 5;
+    if (!name || !text) return showAlert('addAlert','error','Fill in client name and text.','Fill in client name and text.');
+    const btn = document.getElementById('addTestimonialBtn'); btn.classList.add('loading'); btn.disabled = true;
+    try {
+      await apiAuthPost('/api/testimonials', { artistId: selectedArtist._id, clientName: name, text, rating });
+      document.getElementById('tClientName').value = '';
+      document.getElementById('tText').value = '';
+      document.getElementById('tRating').value = '5';
+      initStars('starInput', 'tRating');
+      showAlert('addAlert','success','✓ Testimonial added!','✓ Testimonial added!');
+      loadTestimonials();
+    } catch(err) { showAlert('addAlert','error',err.message,err.message); }
+    finally { btn.classList.remove('loading'); btn.disabled = false; }
+  }
+
+  async function deleteTestimonial(id) {
+    if (!confirm('Delete this testimonial?')) return;
+    try { await apiAuthDelete('/api/testimonials/' + id); loadTestimonials(); } catch(err) { alert(err.message); }
+  }
+
+  function openEditModal(t) {
+    document.getElementById('editId').value = t._id;
+    document.getElementById('editClientName').value = t.clientName;
+    document.getElementById('editText').value = t.text;
+    document.getElementById('editRating').value = t.rating || 5;
+    initStars('editStarInput', 'editRating');
+    document.getElementById('editModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeEditModal() { document.getElementById('editModal').classList.remove('open'); document.body.style.overflow = ''; }
+
+  async function saveEdit() {
+    const id = document.getElementById('editId').value;
+    const name = document.getElementById('editClientName').value.trim();
+    const text = document.getElementById('editText').value.trim();
+    const rating = parseInt(document.getElementById('editRating').value) || 5;
+    if (!name || !text) return showAlert('editAlert','error','Fill in all fields.','Fill in all fields.');
+    const btn = document.getElementById('editSaveBtn'); btn.classList.add('loading'); btn.disabled = true;
+    try {
+      await apiAuthPost('/api/testimonials/' + id, { clientName: name, text, rating }, 'PUT');
+      closeEditModal(); loadTestimonials();
+    } catch(err) { showAlert('editAlert','error',err.message,err.message); }
+    finally { btn.classList.remove('loading'); btn.disabled = false; }
+  }
+
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', e => { if (e.target === m) { m.classList.remove('open'); document.body.style.overflow = ''; } });
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { document.querySelectorAll('.modal-overlay.open').forEach(m => { m.classList.remove('open'); document.body.style.overflow = ''; }); }
+  });
+
+  loadArtists();
+</script>
+</body>
+</html>
