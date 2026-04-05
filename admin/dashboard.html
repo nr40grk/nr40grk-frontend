@@ -164,7 +164,9 @@
     <button class="sidebar-link" onclick="switchTab('bookings')">📋 Bookings <span class="sidebar-badge" id="pendingBadge" style="display:none;"></span></button>
     <button class="sidebar-link" onclick="switchTab('piercing')">💎 Piercing</button>
     <button class="sidebar-link" onclick="switchTab('contacts')">✉️ Messages <span class="sidebar-badge" id="unreadBadge" style="display:none;"></span></button>
-  </aside>
+  <a class="sidebar-link" href="testimonials.html">⭐ Testimonials</a>
+
+</aside>
 
   <main class="admin-main">
 
@@ -428,7 +430,7 @@
       artists.forEach(a => {
         const card = document.createElement('div'); card.className = 'artist-admin-card';
         const cover = a.profilePhoto?.url || a.photos?.[0]?.url || '';
-        card.innerHTML = (cover ? '<img class="artist-admin-photo" src="' + cover + '" alt="' + a.name + '" loading="lazy">' : '<div style="width:100%;aspect-ratio:3/2;background:var(--dark);display:flex;align-items:center;justify-content:center;color:var(--border);font-size:2rem;">📷</div>') + '<div class="artist-admin-body"><div class="artist-admin-name">' + a.name + (!a.active ? ' <span style="color:var(--red);font-size:0.65rem;">(Hidden)</span>' : '') + '</div><div class="artist-admin-role">' + a.role.en + '</div><div class="artist-admin-bio">' + a.bio.en + '</div><div class="artist-admin-actions"><button class="btn btn-ghost btn-sm" onclick=\'editArtist(' + JSON.stringify(a).replace(/'/g,"&apos;") + ')\'>✏️ Edit</button><button class="btn btn-danger btn-sm" onclick="deleteArtist(\'' + a._id + '\',\'' + a.name + '\')">Delete</button></div></div>';
+        card.innerHTML = (cover ? '<img class="artist-admin-photo" src="' + cover + '" alt="' + a.name + '" loading="lazy">' : '<div style="width:100%;aspect-ratio:3/2;background:var(--dark);display:flex;align-items:center;justify-content:center;color:var(--border);font-size:2rem;">📷</div>') + '<div class="artist-admin-body"><div class="artist-admin-name">' + a.name + (!a.active ? ' <span style="color:var(--red);font-size:0.65rem;">(Hidden)</span>' : '') + '</div><div class="artist-admin-role">' + a.role.en + '</div><div class="artist-admin-bio">' + a.bio.en + '</div><div class="artist-admin-actions"><button class="btn btn-ghost btn-sm" onclick=\'editArtist(' + JSON.stringify(a).replace(/'/g,"&apos;") + ')\'>✏️ Edit</button><a class="btn btn-ghost btn-sm" href="testimonials.html">⭐ Reviews</a><button class="btn btn-danger btn-sm" onclick="deleteArtist(\'' + a._id + '\',\'' + a.name + '\')">Delete</button></div></div>';
         grid.appendChild(card);
       });
     } catch(err) { grid.innerHTML = '<div style="color:var(--red);padding:40px;">' + err.message + '</div>'; }
