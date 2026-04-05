@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Space+Mono:wght@400;700&family=Unbounded:wght@300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=Space+Mono:wght@400;700&family=Unbounded:wght@300;400;700;900&display=swap');
 
 /* ─── VARIABLES ─── */
 :root {
@@ -22,7 +22,7 @@ html { scroll-behavior: smooth; font-size: 16px; }
 body {
   background: var(--black);
   color: var(--white);
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Noto Sans', sans-serif;
   font-size: 1.15rem;
   line-height: 1.7;
   min-height: 100vh;
@@ -231,7 +231,7 @@ nav.scrolled {
 }
 .heading em {
   font-style: italic;
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Noto Sans', sans-serif;
   color: var(--gold);
   font-weight: 300;
   font-size: 1.1em;
@@ -317,7 +317,7 @@ p, li, td, th { font-size: 1.1rem; }
   background: var(--dark);
   border: 1px solid var(--border);
   color: var(--white);
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Noto Sans', sans-serif;
   font-size: 1.1rem;
   padding: 14px 18px;
   outline: none;
