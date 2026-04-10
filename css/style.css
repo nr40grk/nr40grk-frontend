@@ -563,6 +563,137 @@ footer { background: var(--dark); border-top: 1px solid var(--border); padding: 
 .dev-credit a { color: var(--gold); text-decoration: none; opacity: 0.6; transition: opacity 0.2s; }
 .dev-credit a:hover { opacity: 1; }
 
+/* ─── FOOTER TERMINAL WIDGET ─── */
+.footer-terminal-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 0 0;
+  border-top: 1px solid var(--border);
+  margin-top: 0;
+}
+.ft-terminal {
+  width: 320px;
+  max-width: 100%;
+  background: var(--dark);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1.4rem 1.6rem 1.6rem;
+  font-family: 'Space Mono', monospace;
+  position: relative;
+  box-shadow: 0 0 24px rgba(201,168,76,.06), 0 4px 32px rgba(0,0,0,.5);
+  box-sizing: border-box;
+  transition: box-shadow .3s;
+}
+.ft-terminal:hover, .ft-terminal:focus-within {
+  box-shadow: 0 0 36px rgba(201,168,76,.14), 0 4px 32px rgba(0,0,0,.5);
+}
+.ft-header {
+  display: flex; align-items: center; gap: .6rem;
+  margin-bottom: 1.2rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: .8rem;
+}
+.ft-logo {
+  width: 18px; height: 18px;
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .6rem; font-weight: 700; color: var(--gold);
+  flex-shrink: 0;
+}
+.ft-title {
+  font-size: .6rem; letter-spacing: .18em; text-transform: uppercase;
+  color: rgba(201,168,76,.4);
+}
+.ft-dots { display: flex; gap: .35rem; margin-left: auto; }
+.ft-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); }
+.ft-line {
+  display: flex; align-items: center; gap: .4rem;
+  min-height: 1.6rem;
+}
+.ft-prompt { color: var(--gold); font-size: .82rem; flex-shrink: 0; }
+.ft-text {
+  color: var(--gold); font-size: .82rem;
+  text-shadow: 0 0 6px rgba(201,168,76,.35);
+  white-space: nowrap; overflow: hidden;
+}
+.ft-cursor {
+  display: inline-block;
+  width: 8px; height: .9em;
+  background: var(--gold);
+  margin-left: 2px;
+  vertical-align: middle;
+  animation: ftBlink .9s step-end infinite;
+  box-shadow: 0 0 4px rgba(201,168,76,.6);
+}
+@keyframes ftBlink { 0%,100% { opacity: 1 } 50% { opacity: 0 } }
+.ft-input-wrap {
+  display: flex; align-items: center; gap: .4rem;
+  margin-top: .5rem;
+}
+.ft-input {
+  background: none; border: none; outline: none;
+  color: var(--gold); font-family: inherit; font-size: .82rem;
+  flex: 1; caret-color: transparent;
+  text-shadow: 0 0 6px rgba(201,168,76,.35);
+}
+.ft-idle {
+  font-size: .65rem; color: rgba(201,168,76,.18);
+  margin-top: .9rem; letter-spacing: .04em;
+  opacity: 0; transition: opacity .8s;
+  font-style: italic;
+}
+.ft-idle.visible { opacity: 1; }
+.ft-cta {
+  display: none;
+  margin-top: 1rem;
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  font-family: 'Space Mono', monospace;
+  font-size: .75rem; letter-spacing: .15em; text-transform: uppercase;
+  padding: .55rem 1rem;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 0 12px rgba(201,168,76,.2), inset 0 0 8px rgba(201,168,76,.04);
+  transition: box-shadow .2s, background .2s;
+  border-radius: 2px;
+  animation: ftFadeIn .5s ease both;
+}
+.ft-cta:hover {
+  background: rgba(201,168,76,.06);
+  box-shadow: 0 0 22px rgba(201,168,76,.4), inset 0 0 12px rgba(201,168,76,.08);
+}
+@keyframes ftFadeIn { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
+.ft-sig {
+  font-size: .55rem; color: rgba(201,168,76,.18);
+  margin-top: 1rem; text-align: right; letter-spacing: .1em;
+}
+.ft-dev {
+  display: flex; flex-direction: column; gap: .2rem; align-items: center;
+}
+.ft-dev-label {
+  font-family: 'Space Mono', monospace; font-size: .55rem;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: #444;
+}
+.ft-dev-link {
+  font-family: 'Space Mono', monospace; font-size: .72rem; font-weight: 500;
+  color: #555;
+  border-bottom: 1px solid transparent;
+  transition: color .18s, border-color .18s;
+  text-decoration: none;
+}
+.ft-dev-link:hover { color: var(--gold); border-color: var(--gold); }
+
+@media (max-width: 560px) {
+  .ft-terminal { width: 100%; }
+}
+
 /* ─── RESPONSIVE ─── */
 @media (max-width: 1024px) {
   .grid-4 { grid-template-columns: repeat(3, 1fr); }
