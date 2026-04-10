@@ -217,7 +217,44 @@
       <span>Κάνιγγος 27, Αθήνα 106 82</span>
     </div>
   </div>
-  <div class="dev-credit">Developed by <a href="https://nikolassapa.vercel.app/" target="_blank" rel="noopener">Nikolas Sapalidis</a></div>
+  <div class="footer-terminal-wrap">
+    <div class="ft-terminal" id="ftWidget">
+      <div class="ft-header">
+        <div class="ft-logo">N</div>
+        <span class="ft-title">contact.terminal</span>
+        <div class="ft-dots"><span class="ft-dot"></span><span class="ft-dot"></span><span class="ft-dot"></span></div>
+      </div>
+      <div class="ft-line">
+        <span class="ft-prompt">&gt;_</span>
+        <span class="ft-text" id="ftTyped"></span><span class="ft-cursor" id="ftCursor"></span>
+      </div>
+      <div class="ft-input-wrap" id="ftInputWrap" style="display:none">
+        <span class="ft-prompt">&gt;</span>
+        <input class="ft-input" id="ftInput" type="text" autocomplete="off" spellcheck="false" aria-label="Type HELLO to connect">
+      </div>
+      <div class="ft-line" id="ftFeedback" style="display:none">
+        <span class="ft-prompt">&gt;_</span>
+        <span class="ft-text" id="ftFeedbackText"></span>
+      </div>
+      <a class="ft-cta" id="ftCta" href="https://nikolassapa.vercel.app/" target="_blank" rel="noopener">[ GET A QUOTE ]</a>
+      <div class="ft-idle" id="ftIdle">// CONTACT FORM ACTIVE. ENTER COMMAND.</div>
+      <div class="ft-sig">Developed by Nikolas</div>
+    </div>
+    <div class="ft-dev">
+      <span class="ft-dev-label">Developed by</span>
+      <a class="ft-dev-link" href="https://nikolassapa.vercel.app/" target="_blank" rel="noopener">Nikolas Sapalidis</a>
+    </div>
+  </div>
+  <script>
+  (function(){
+    var t=document.getElementById('ftTyped'),c=document.getElementById('ftCursor'),iw=document.getElementById('ftInputWrap'),inp=document.getElementById('ftInput'),fw=document.getElementById('ftFeedback'),ft=document.getElementById('ftFeedbackText'),cta=document.getElementById('ftCta'),idle=document.getElementById('ftIdle'),timer;
+    function type(s,cb){var i=0;t.textContent='';var iv=setInterval(function(){t.textContent+=s[i++];if(i>=s.length){clearInterval(iv);c.style.display='none';iw.style.display='flex';inp.focus();if(cb)cb();}},48);}
+    function resetIdle(){clearTimeout(timer);idle.classList.remove('visible');timer=setTimeout(function(){idle.classList.add('visible');},3200);}
+    type(">_ TYPE 'HELLO' TO CONNECT.",resetIdle);
+    inp.addEventListener('input',resetIdle);
+    inp.addEventListener('keydown',function(e){if(e.key!=='Enter')return;var v=inp.value.trim().toUpperCase();if(v==='HELLO'){iw.style.display='none';idle.classList.remove('visible');clearTimeout(timer);fw.style.display='flex';ft.textContent='';var m='CONNECTING...',i=0;var iv=setInterval(function(){ft.textContent+=m[i++];if(i>=m.length){clearInterval(iv);setTimeout(function(){fw.style.display='none';cta.style.display='block';},900);}},60);}else{inp.value='';}});
+  })();
+  </script>
 </footer>
 
 <script src="js/main.js"></script>
