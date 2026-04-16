@@ -179,7 +179,7 @@
   <script>
   (function(){
     var t=document.getElementById('ftTyped'),c=document.getElementById('ftCursor'),iw=document.getElementById('ftInputWrap'),inp=document.getElementById('ftInput'),fw=document.getElementById('ftFeedback'),ft=document.getElementById('ftFeedbackText'),cta=document.getElementById('ftCta'),idle=document.getElementById('ftIdle'),timer;
-    function type(s,cb){var i=0;t.textContent='';var iv=setInterval(function(){t.textContent+=s[i++];if(i>=s.length){clearInterval(iv);c.style.display='none';iw.style.display='flex';inp.focus();if(cb)cb();}},48);}
+    function type(s,cb){var i=0;t.textContent='';var iv=setInterval(function(){t.textContent+=s[i++];if(i>=s.length){clearInterval(iv);c.style.display='none';iw.style.display='flex';inp.focus({ preventScroll: true });if(cb)cb();}},48);}
     function resetIdle(){clearTimeout(timer);idle.classList.remove('visible');timer=setTimeout(function(){idle.classList.add('visible');},3200);}
     type(">_ TYPE 'HELLO' TO CONNECT.",resetIdle);
     inp.addEventListener('input',resetIdle);
